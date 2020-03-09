@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29424.173
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NJBC.Models", "NJBC.Models\NJBC.Models.csproj", "{93AE8831-4F48-402D-9F9D-F7298A835860}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NJBC.DataLayer", "NJBC.DataLayer\NJBC.DataLayer.csproj", "{A146BE9B-6EA5-40E3-9097-BC40E9A281C2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NJBC.Entites", "NJBC.Entites\NJBC.Entites.csproj", "{7408F53C-5E8D-477D-B64F-B466D6C257DD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NJBC.Web.Api", "NJBC.Web.Api\NJBC.Web.Api.csproj", "{49326276-452F-48EF-817F-E3757AB896B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NJBC.Services", "NJBC.Services\NJBC.Services.csproj", "{7208F35A-21B0-497A-864F-B8B42DC32EA4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NJBC.Web.LabelApp", "NJBC.Web.LabelApp\NJBC.Web.LabelApp.csproj", "{C17F87FC-B929-42F8-A2A9-00F492FD1BC7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{93AE8831-4F48-402D-9F9D-F7298A835860}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93AE8831-4F48-402D-9F9D-F7298A835860}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93AE8831-4F48-402D-9F9D-F7298A835860}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93AE8831-4F48-402D-9F9D-F7298A835860}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A146BE9B-6EA5-40E3-9097-BC40E9A281C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A146BE9B-6EA5-40E3-9097-BC40E9A281C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A146BE9B-6EA5-40E3-9097-BC40E9A281C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A146BE9B-6EA5-40E3-9097-BC40E9A281C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7408F53C-5E8D-477D-B64F-B466D6C257DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7408F53C-5E8D-477D-B64F-B466D6C257DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7408F53C-5E8D-477D-B64F-B466D6C257DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7408F53C-5E8D-477D-B64F-B466D6C257DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49326276-452F-48EF-817F-E3757AB896B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49326276-452F-48EF-817F-E3757AB896B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49326276-452F-48EF-817F-E3757AB896B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49326276-452F-48EF-817F-E3757AB896B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7208F35A-21B0-497A-864F-B8B42DC32EA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7208F35A-21B0-497A-864F-B8B42DC32EA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7208F35A-21B0-497A-864F-B8B42DC32EA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7208F35A-21B0-497A-864F-B8B42DC32EA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C17F87FC-B929-42F8-A2A9-00F492FD1BC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C17F87FC-B929-42F8-A2A9-00F492FD1BC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C17F87FC-B929-42F8-A2A9-00F492FD1BC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C17F87FC-B929-42F8-A2A9-00F492FD1BC7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BFC9A617-EE29-4974-8740-DDA51BD239F6}
+	EndGlobalSection
+EndGlobal

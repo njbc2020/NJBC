@@ -1,0 +1,53 @@
+﻿@*@model NJBC.DataLayer.Models.OrgQuestion*@
+
+@{
+    ViewData["Title"] = "Label";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h6>پرسش: </h6>
+        <h2>مادرشوهر شما چه مدلیه؟</h2>
+        <h3>
+            اره بنظر منم مخفی کاریه همه چیز و باید به طرف مقابل بگیم   عشق چیزی نیست جز یگانگی دو روح   هر دو باید یکی بشن با هم انگار یه نفرن . بعضی موقع ها هم حرفای بیخود و بی جا حرف زدن باعث شک میشه باید مراقب بود .
+        </h3>
+    </div>
+    <div class="col-12"><hr /></div>
+</div>
+<div class="row">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>کاربر</th>
+                <th>متن</th>
+                <th>عملیات</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <div>
+                        <div style="width:100px; height:100px; border-radius:50%; background-color:darkgray; text-align:center" >
+                            <span class="fa fa-user-alt"></span><h6>مونا جون</h6></div>
+                        
+                        <div class=""></div>
+                    </div>
+                </td>
+                <td>ادم خودش که مورد دار باشه به بقیه هم شک میکنه</td>
+                <td>
+                    <button type="button" class="btn btn-outline-primary">مرتبط</button>
+                    <button type="button" class="btn btn-outline-secondary">نا مرتبط</button>
+                    <button type="button" class="btn btn-outline-success">تبلیغات</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div>
+
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>
