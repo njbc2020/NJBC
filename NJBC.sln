@@ -11,9 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NJBC.Entites", "NJBC.Entite
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NJBC.Web.Api", "NJBC.Web.Api\NJBC.Web.Api.csproj", "{49326276-452F-48EF-817F-E3757AB896B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NJBC.Services", "NJBC.Services\NJBC.Services.csproj", "{7208F35A-21B0-497A-864F-B8B42DC32EA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NJBC.Services", "NJBC.Services\NJBC.Services.csproj", "{7208F35A-21B0-497A-864F-B8B42DC32EA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NJBC.Web.LabelApp", "NJBC.Web.LabelApp\NJBC.Web.LabelApp.csproj", "{C17F87FC-B929-42F8-A2A9-00F492FD1BC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NJBC.Web.LabelApp", "NJBC.Web.LabelApp\NJBC.Web.LabelApp.csproj", "{C17F87FC-B929-42F8-A2A9-00F492FD1BC7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NJBC.Web.App.Label", "NJBC.Web.App.Label\NJBC.Web.App.Label.csproj", "{94D20CE5-1AF0-4144-9800-8008489A9EB1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{C17F87FC-B929-42F8-A2A9-00F492FD1BC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C17F87FC-B929-42F8-A2A9-00F492FD1BC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C17F87FC-B929-42F8-A2A9-00F492FD1BC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94D20CE5-1AF0-4144-9800-8008489A9EB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94D20CE5-1AF0-4144-9800-8008489A9EB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94D20CE5-1AF0-4144-9800-8008489A9EB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94D20CE5-1AF0-4144-9800-8008489A9EB1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

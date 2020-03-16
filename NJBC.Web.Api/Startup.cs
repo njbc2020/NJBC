@@ -30,11 +30,15 @@ namespace NJBC.Web.Api
         {
             services.AddControllers();
 
-            services.AddDbContext<NJBC_DBContext>(x =>
-            x.UseSqlServer("Data source=.;initial catalog=NJBC_DB;user id=sa;password=123;MultipleActiveResultSets=True;"));
-
-
             services.AddScoped<ISemEvalRepository, SemEvalRepository>();
+
+
+            services.AddDbContext<NJBC_DBContext>(x =>
+            x.UseSqlServer(
+                Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
             //services.AddScoped< ISemEvalService, SemEvalService>();
             //services.AddDbContext<AppilcationDbContext>(options =>
             //{
@@ -57,6 +61,12 @@ namespace NJBC.Web.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
+
+            InitializeDb(app);
 
             app.UseHttpsRedirection();
 
@@ -68,6 +78,18 @@ namespace NJBC.Web.Api
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private static void InitializeDb(IApplicationBuilder app)
+        {
+            var scopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
+            using (var scope = scopeFactory.CreateScope())
+            {
+                using (var context = scope.ServiceProvider.GetService<NJBC_DBContext>())
+                {
+                    context.Database.Migrate();
+                }
+            }
         }
     }
 }

@@ -1,0 +1,59 @@
+﻿@model NJBC.DataLayer.Models.RelQuestion
+
+@{
+    ViewData["Title"] = "Label";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h3>category: @Model.Orgq.OrgQsubject</h3>
+        <h6>پرسش: </h6>
+        <h2>@Model.Orgq.OrgQbody</h2>
+        <h3>
+            @Model.RelQbody
+        </h3>
+    </div>
+    <div class="col-12"><hr /></div>
+</div>
+<div class="row">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>کاربر</th>
+                <th>متن</th>
+                <th>عملیات</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.RelComment)
+            {
+                <tr>
+                    <td>
+                        <div>
+                            <div style="width:100px; height:100px; border-radius:50%; background-color:darkgray; text-align:center">
+                                <span class="fa fa-user-alt"></span><h6>@item.RelcUsername</h6>
+                            </div>
+
+                            <div class=""></div>
+                        </div>
+                    </td>
+                    <td>@item.RelCtext</td>
+                    <td>
+                        <button type="button" class="btn btn-outline-primary">مرتبط</button>
+                        <button type="button" class="btn btn-outline-secondary">نا مرتبط</button>
+                        <button type="button" class="btn btn-outline-success">تبلیغات</button>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>
+
+<div>
+
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>

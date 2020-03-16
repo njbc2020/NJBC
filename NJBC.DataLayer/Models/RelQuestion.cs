@@ -9,7 +9,7 @@ namespace NJBC.DataLayer.Models
         {
             RelComment = new HashSet<RelComment>();
         }
-
+        
         public int? OrgqId { get; set; }
         public int RelqId { get; set; }
         public string RelqIdName { get; set; }

@@ -14,7 +14,9 @@ namespace NJBC.DataLayer.Models
         public string OrgqIdName { get; set; }
         public string OrgQsubject { get; set; }
         public string OrgQbody { get; set; }
+        public int? UserId { get; set; }
 
+        public User User { get; set; }
         public ICollection<RelQuestion> RelQuestion { get; set; }
     }
 }

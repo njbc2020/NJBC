@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using System.Linq;
 
 namespace NJBC.DataLayer.Models
 {
@@ -15,6 +16,7 @@ namespace NJBC.DataLayer.Models
         public virtual DbSet<OrgQuestion> OrgQuestion { get; set; }
         public virtual DbSet<RelComment> RelComment { get; set; }
         public virtual DbSet<RelQuestion> RelQuestion { get; set; }
+        public virtual DbSet<User> Users { get; set; }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
