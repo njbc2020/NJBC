@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NJBC.DataLayer.Models
 {
@@ -9,8 +10,9 @@ namespace NJBC.DataLayer.Models
         {
             RelComment = new HashSet<RelComment>();
         }
-        
-        public int? OrgqId { get; set; }
+
+        [ForeignKey("OrgQuestion")]
+        public int OrgqId { get; set; }
         public int RelqId { get; set; }
         public string RelqIdName { get; set; }
         public string RelqRankingOrder { get; set; }
@@ -22,7 +24,7 @@ namespace NJBC.DataLayer.Models
         public string RelQsubject { get; set; }
         public string RelQbody { get; set; }
 
-        public OrgQuestion Orgq { get; set; }
-        public ICollection<RelComment> RelComment { get; set; }
+        public virtual OrgQuestion Orgq { get; set; }
+        public virtual ICollection<RelComment> RelComment { get; set; }
     }
 }

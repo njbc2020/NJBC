@@ -20,6 +20,8 @@ namespace NJBC.DataLayer.Models
             var connectionString = configuration.GetConnectionString("DefaultConnection")
                                                 .Replace("|DataDirectory|", Path.Combine(basePath, "wwwroot", "app_data"));
             builder.UseSqlServer(connectionString);
+            builder.UseLazyLoadingProxies();
+            //builder.UseLazyLoadingProxies();
             return new NJBC_DBContext(builder.Options);
         }
     }

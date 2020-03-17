@@ -9,6 +9,11 @@ namespace NJBC.DataLayer.Models
 {
     public partial class User
     {
+        public User()
+        {
+            OrgQuestions = new HashSet<OrgQuestion>();
+        }
+
         [Key]
         public int UserId { get; set; }
         public string Username { get; set; }
@@ -16,6 +21,6 @@ namespace NJBC.DataLayer.Models
         public bool Active { get; set; }
         public DateTime LastDatetime { get; set; }
 
-        public ICollection<OrgQuestion> OrgQuestions { get; set; }
+        public virtual ICollection<OrgQuestion> OrgQuestions { get; set; }
     }
 }

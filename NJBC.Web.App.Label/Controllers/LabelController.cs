@@ -19,10 +19,10 @@ namespace NJBC.Web.App.Label.Controllers
 
         public IActionResult Index(string id)
         {
-            var s = SemEvalRepository.SearchRelQuestionAsync().Result.FirstOrDefault();
+            var s = SemEvalRepository.SearchRelQuestionAsync("","").Result.FirstOrDefault();
 
             var rng = new Random();
-            return View();
+            return View(s);
         }
     }
 }

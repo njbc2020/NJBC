@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NJBC.DataLayer.Models
 {
     public partial class RelComment
     {
-        public int? RelqId { get; set; }
+        [ForeignKey("RelQuestion")]
+        public int RelqId { get; set; }
         public int RelcId { get; set; }
         public string RelcIdName { get; set; }
         public DateTime? RelcDate { get; set; }
@@ -15,6 +17,6 @@ namespace NJBC.DataLayer.Models
         public string RelcRelevance2relq { get; set; }
         public string RelCtext { get; set; }
 
-        public RelQuestion Relq { get; set; }
+        public virtual RelQuestion Relq { get; set; }
     }
 }

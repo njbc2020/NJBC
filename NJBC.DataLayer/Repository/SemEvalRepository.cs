@@ -113,9 +113,9 @@ namespace NJBC.DataLayer.Repository
                 await dBContext.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        public Task<RelQuestion> GetRelQuestionByIdAsync(int id)
+        public async Task<RelQuestion> GetRelQuestionByIdAsync(int id)
         {
-            return dBContext.RelQuestion.FindAsync(id);
+            return dBContext.RelQuestion.Find(id);
         }
 
         public async Task<RelQuestion> GetRelQuestionCategoryAsync(string category)

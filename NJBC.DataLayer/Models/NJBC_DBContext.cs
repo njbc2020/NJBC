@@ -18,14 +18,15 @@ namespace NJBC.DataLayer.Models
         public virtual DbSet<RelQuestion> RelQuestion { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    if (!optionsBuilder.IsConfigured)
-        //    {
-        //        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-        //        optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=NJBC_DB;Integrated Security=True;");
-        //    }
-        //}
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=NJBC_DB;Integrated Security=True;");
+                optionsBuilder.UseLazyLoadingProxies();
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -86,6 +87,7 @@ namespace NJBC.DataLayer.Models
 
             modelBuilder.Entity<RelQuestion>(entity =>
             {
+
                 entity.HasKey(e => e.RelqId);
 
                 entity.Property(e => e.RelqId).HasColumnName("RELQ_ID");

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NJBC.DataLayer.Models;
 
 namespace NJBC.DataLayer.Migrations
 {
     [DbContext(typeof(NJBC_DBContext))]
-    partial class NJBC_DBContextModelSnapshot : ModelSnapshot
+    [Migration("20200317182136_LazyLoading")]
+    partial class LazyLoading
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,7 +93,7 @@ namespace NJBC.DataLayer.Migrations
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<int>("RelqId")
+                    b.Property<int?>("RelqId")
                         .HasColumnName("RELQ_ID")
                         .HasColumnType("int");
 
@@ -199,9 +201,7 @@ namespace NJBC.DataLayer.Migrations
                     b.HasOne("NJBC.DataLayer.Models.RelQuestion", "Relq")
                         .WithMany("RelComment")
                         .HasForeignKey("RelqId")
-                        .HasConstraintName("FK__RelCommen__RELQ___3C69FB99")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasConstraintName("FK__RelCommen__RELQ___3C69FB99");
                 });
 
             modelBuilder.Entity("NJBC.DataLayer.Models.RelQuestion", b =>

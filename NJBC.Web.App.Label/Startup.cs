@@ -31,7 +31,8 @@ namespace NJBC.Web.App.Label
 
             services.AddDbContext<NJBC_DBContext>(x =>
             x.UseSqlServer(
-                Configuration.GetConnectionString("DefaultConnection")));
+                Configuration.GetConnectionString("DefaultConnection"))
+            .UseLazyLoadingProxies());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

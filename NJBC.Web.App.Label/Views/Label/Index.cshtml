@@ -6,22 +6,40 @@
 
 <div class="row">
     <div class="col-12">
-        <h3>category: @Model.Orgq.OrgQsubject</h3>
-        <h6>پرسش: </h6>
-        <h2>@Model.Orgq.OrgQbody</h2>
-        <h3>
-            @Model.RelQbody
-        </h3>
+        @if (Model.Orgq != null)
+        {
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">خانه</a></li>
+                    <li class="breadcrumb-item"><a href="#">تالار نامزدی</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@Model.Orgq.OrgQsubject</li>
+                </ol>
+            </nav>
+            <div class="card text-white bg-dark mb-6">
+                <div class="card-header"><i class="fa fa-question"></i> پرسش:</div>
+                <div class="card-body">
+                    <h5 class="card-title">@Model.Orgq.OrgQbody</h5>
+                    <p class="card-text">
+                        <br />
+                        <span class="btn btn-sm btn-outline-warning">
+                            <i class="fa fa-info-circle"></i>&nbsp; شرح:
+                        </span>
+                        @Model.RelQbody
+                    </p>
+                </div>
+            </div>
+            
+        }
     </div>
     <div class="col-12"><hr /></div>
 </div>
 <div class="row">
-    <table class="table table-striped">
+    <table class="table table-responsive table-striped">
         <thead>
             <tr>
-                <th>کاربر</th>
-                <th>متن</th>
-                <th>عملیات</th>
+                <th><span class="fa fa-user-alt"></span>کاربر</th>
+                <th class="text-primary"><span class="fa fa-comment-alt"></span> متن</th>
+                <th><span class="fa fa-fire-alt text-warning"></span>عملیات</th>
             </tr>
         </thead>
         <tbody>
@@ -31,29 +49,23 @@
                     <td>
                         <div>
                             <div style="width:100px; height:100px; border-radius:50%; background-color:darkgray; text-align:center">
-                                <span class="fa fa-user-alt"></span><h6>@item.RelcUsername</h6>
+                                <span class="fa fa-2x fa-user-alt text-white"></span><h6>@item.RelcUsername</h6>
                             </div>
 
                             <div class=""></div>
                         </div>
                     </td>
-                    <td>@item.RelCtext</td>
                     <td>
-                        <button type="button" class="btn btn-outline-primary">مرتبط</button>
-                        <button type="button" class="btn btn-outline-secondary">نا مرتبط</button>
-                        <button type="button" class="btn btn-outline-success">تبلیغات</button>
+                        <strong class="btn btn-sm btn-primary">پاسخ: </strong>
+                        <p class="text-comment">@item.RelCtext</p>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-outline-success btn-action" comment-id="@item.RelcId"><i class="fa fa-check"></i> مرتبط</button>
+                        <button type="button" class="btn btn-outline-danger btn-action" comment-id="@item.RelcId"><i class="fa fa-times"></i> نا مرتبط</button>
+                        <button type="button" class="btn btn-outline-dark btn-action" comment-id="@item.RelcId"><i class="fa fa-credit-card"></i> تبلیغات</button>
                     </td>
                 </tr>
             }
-
         </tbody>
     </table>
-</div>
-
-<div>
-
-</div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
 </div>
