@@ -69,6 +69,18 @@ namespace NJBC.Services.Crawler
                             string[] _tempStrArray = s.Select(x => x.InnerText.Trim().Replace("\r\n", "").Replace("\t", " . ").Replace(",", " . ").Replace("&nbsp;", " ").Replace("\n", " . ")).ToList().Where(x => !string.IsNullOrEmpty(x)).ToArray();
                             description = string.Join(". ", _tempStrArray).Replace("  ", " ").Replace(".. ", ". ").Replace(".. ", ". ").Replace(".. ", ". ");
                         }
+
+                        var createDatetime = doc.GetElementbyId("topic").SelectSingleNode(
+                            "//div[@class='col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-9 p-x-0  topic-post__body p-t-0 direction-rtl nini-medium']" +
+                            "//div[@class='col-xs-12 pull-xs-right p-x-0']" +
+                            "//div[@class='col-xs-6 created-post text-xs-left p-x-1 m-t-0']" +
+                            "//div[@class='d-inline-block']"+
+                            "//span[@class='date']"
+                           );
+                        if (createDatetime != null)
+                        {
+                            topic.CreateDate = createDatetime.InnerText;
+                        }
                     }
 
                     // بدست آمدن عنوان سوال
@@ -113,14 +125,17 @@ namespace NJBC.Services.Crawler
                     topic.Question = question;
                     topic.Description = description;
 
-                    string csv = "";
+                    
                     var jsonFile = JsonConvert.SerializeObject(topic);
                     MakeJson(jsonFile, link.ForumId, topic.TopicId);
-                    string outCsvAll = "";
-                    csv = JsonToCSV(topic, out outCsvAll);
-                    string path = $@"C:\Nini\Forum\{link.ForumId}\";
+                    // به دلیل وجود مقادیر تمیز نشده در برخی از فیلدها، امکان دخیره سازی با فرمت فوق ناممکن است
 
-                    MakeCsv(csv, path, $"Topic_{topic.TopicId}");
+                    //string csv = "";
+                    //string outCsvAll = "";
+                    //csv = JsonToCSV(topic, out outCsvAll);
+                    //string path = $@"C:\Nini\Forum\{link.ForumId}\";
+
+                    //MakeCsv(csv, path, $"Topic_{topic.TopicId}");
                 }
                 catch (Exception ex)
                 {
@@ -447,6 +462,7 @@ namespace NJBC.Services.Crawler
                 {
                     _txt = doc1.GetElementbyId("msgDiv").InnerText.ToString();
                 }
+                msg1.Text = _txt;
                 _txt = _txt.Replace(@"	", ". ").Replace("&nbsp;", " ").Replace("  ", " ")
                     .Replace("  ", " ").Replace("\n\r", ". ").Replace("\r\n", ". ").Replace(". . ", ". ").Trim();
                 if (string.IsNullOrEmpty(_txt))
@@ -458,7 +474,7 @@ namespace NJBC.Services.Crawler
                     _txt = _txt.Substring(1, _txt.Length - 1);
                 }
                 _txt = _txt.Trim();
-                msg1.Text = _txt;
+                msg1.TextClean = _txt;
                 if (doc1.GetElementbyId("reply-message") != null)
                 {
                     if (int.TryParse(doc1.GetElementbyId("reply-message").Attributes["data-id"].Value, out int _replayId))

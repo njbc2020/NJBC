@@ -1,6 +1,5 @@
-﻿using System;
-using NJBC.Models.Crawler;
-using NJBC.Services.Crawler;
+﻿using NJBC.Services.Crawler;
+using System;
 
 namespace NJBC.App.Crawler
 {
