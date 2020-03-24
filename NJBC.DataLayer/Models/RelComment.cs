@@ -16,7 +16,7 @@ namespace NJBC.DataLayer.Models
         public string RelcRelevance2orgq { get; set; }
         public string RelcRelevance2relq { get; set; }
         public string RelCtext { get; set; }
-
+        public string RelCtextClean { get; set; }
         public virtual RelQuestion Relq { get; set; }
     }
 }

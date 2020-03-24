@@ -55,17 +55,20 @@
                             <div class=""></div>
                         </div>
                     </td>
-                    <td>
+                    <td id="cm-@item.RelcId">
                         <strong class="btn btn-sm btn-primary">پاسخ: </strong>
                         <p class="text-comment">@item.RelCtext</p>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-outline-success btn-action" comment-id="@item.RelcId"><i class="fa fa-check"></i> مرتبط</button>
-                        <button type="button" class="btn btn-outline-danger btn-action" comment-id="@item.RelcId"><i class="fa fa-times"></i> نا مرتبط</button>
-                        <button type="button" class="btn btn-outline-dark btn-action" comment-id="@item.RelcId"><i class="fa fa-credit-card"></i> تبلیغات</button>
+                        <button type="button" style="direction:ltr" class="btn btn-outline-success btn-action btn-label btn-good" comment-id="@item.RelcId" btn-label="Good"><i class="fa fa-check"></i> Good</button>
+                        <button type="button" style="direction:ltr" class="btn btn-outline-dark btn-action btn-label btn-good" comment-id="@item.RelcId" btn-label="PotentiallyUseful"><i class="fa fa-comment"></i> PotentiallyUseful</button>
+                        <button type="button" style="direction:ltr" class="btn btn-outline-danger btn-action btn-label btn-good" comment-id="@item.RelcId" btn-label="Bad"><i class="fa fa-times"></i> Bad</button>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+<script>
+
+</script>
