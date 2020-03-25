@@ -8,7 +8,7 @@ namespace NJBC.App.Crawler
         static void Main(string[] args)
         {
             CrawlerHelper crawler = new CrawlerHelper();
-            string message = "Method List: \n";
+            string message = $"Hi\nStart {DateTime.Now}\nMethod List: \n";
             message += "1_ Get Messages From Ninisite\n";
             message += "2_ Convert Json to CSV\n";
             message += "Enter Method Number:";

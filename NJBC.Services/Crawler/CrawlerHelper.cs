@@ -6,6 +6,7 @@ using NJBC.Models.Crawler;
 using System.Linq;
 using Newtonsoft.Json;
 using System.IO;
+using System.Globalization;
 
 namespace NJBC.Services.Crawler
 {
@@ -70,16 +71,40 @@ namespace NJBC.Services.Crawler
                             description = string.Join(". ", _tempStrArray).Replace("  ", " ").Replace(".. ", ". ").Replace(".. ", ". ").Replace(".. ", ". ");
                         }
 
-                        var createDatetime = doc.GetElementbyId("topic").SelectSingleNode(
+                        var createDate = doc.GetElementbyId("topic").SelectSingleNode(
                             "//div[@class='col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-9 p-x-0  topic-post__body p-t-0 direction-rtl nini-medium']" +
                             "//div[@class='col-xs-12 pull-xs-right p-x-0']" +
                             "//div[@class='col-xs-6 created-post text-xs-left p-x-1 m-t-0']" +
                             "//div[@class='d-inline-block']"+
                             "//span[@class='date']"
                            );
-                        if (createDatetime != null)
+                        var createTime = doc.GetElementbyId("topic").SelectSingleNode(
+                            "//div[@class='col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-9 p-x-0  topic-post__body p-t-0 direction-rtl nini-medium']" +
+                            "//div[@class='col-xs-12 pull-xs-right p-x-0']" +
+                            "//div[@class='col-xs-6 created-post text-xs-left p-x-1 m-t-0']" +
+                            "//div[@class='d-inline-block']" +
+                            "//span[@class='time']"
+                           );
+                        if (createDate != null)
                         {
-                            topic.CreateDate = createDatetime.InnerText;
+                            topic.CreateDate = createDate.InnerText;
+                            try
+                            {
+                                if (!string.IsNullOrEmpty(topic.CreateDate) && topic.CreateDate.Contains("/"))
+                                {
+                                    int[] _persianDate = topic.CreateDate.Split('/').Select(x => Convert.ToInt32(x)).ToArray();
+                                    int[] _persianTime = createTime.InnerText.Trim().Split(':').Select(x => Convert.ToInt32(x)).ToArray();
+                                    if (_persianDate.Length == 3 && _persianTime.Length ==2)
+                                    {
+                                        PersianCalendar pc = new PersianCalendar();
+                                        DateTime dt = new DateTime(_persianDate[0], _persianDate[1], _persianDate[2], _persianTime[0], _persianTime[1], 0, pc);
+                                        topic.CreateDatetime = dt;
+                                    }
+                                }
+                            }
+                            catch (Exception)
+                            {
+                            }
                         }
                     }
 
