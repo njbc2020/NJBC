@@ -19,6 +19,9 @@ namespace NJBC.DataLayer.Models
             var builder = new DbContextOptionsBuilder<NJBC_DBContext>();
             var connectionString = configuration.GetConnectionString("DefaultConnection")
                                                 .Replace("|DataDirectory|", Path.Combine(basePath, "wwwroot", "app_data"));
+            if (string.IsNullOrEmpty(connectionString))
+                connectionString = "Data source=.;initial catalog=NJBC_DB;user id=sa;password=123;MultipleActiveResultSets=True;";
+
             builder.UseSqlServer(connectionString);
             builder.UseLazyLoadingProxies();
             //builder.UseLazyLoadingProxies();

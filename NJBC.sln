@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NJBC.Web.LabelApp", "NJBC.W
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NJBC.Web.App.Label", "NJBC.Web.App.Label\NJBC.Web.App.Label.csproj", "{94D20CE5-1AF0-4144-9800-8008489A9EB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NJBC.App.Crawler", "NJBC.App.Crawler\NJBC.App.Crawler.csproj", "{6CC862DA-78EE-4A21-9BC2-86E70C01D7FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NJBC.App.Crawler", "NJBC.App.Crawler\NJBC.App.Crawler.csproj", "{6CC862DA-78EE-4A21-9BC2-86E70C01D7FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

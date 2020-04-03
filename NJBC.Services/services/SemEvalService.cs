@@ -14,6 +14,9 @@ namespace NJBC.Services.services
 
         private readonly ISemEvalRepository SemEvalRepository;
 
+        public SemEvalService()
+        {
+        }
 
         public SemEvalService(ISemEvalRepository SemEvalRepository)
         {

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.Linq;
+using NJBC.DataLayer.Models.Semeval2015;
 
 namespace NJBC.DataLayer.Models
 {
@@ -12,10 +13,16 @@ namespace NJBC.DataLayer.Models
             : base(options)
         {
         }
-
+        public NJBC_DBContext()
+        {
+        }
         public virtual DbSet<OrgQuestion> OrgQuestion { get; set; }
         public virtual DbSet<RelComment> RelComment { get; set; }
         public virtual DbSet<RelQuestion> RelQuestion { get; set; }
+
+        public virtual DbSet<Question> Questions { get; set; }
+        public virtual DbSet<Comment> Comments { get; set; }
+
         public virtual DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -23,7 +30,7 @@ namespace NJBC.DataLayer.Models
             if (!optionsBuilder.IsConfigured)
             {
                 //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=NJBC_DB;Integrated Security=True;");
+                optionsBuilder.UseSqlServer("Data source=.;initial catalog=NJBC_DB;user id=sa;password=123;MultipleActiveResultSets=True;");
                 optionsBuilder.UseLazyLoadingProxies();
             }
         }

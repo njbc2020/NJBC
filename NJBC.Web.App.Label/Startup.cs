@@ -30,8 +30,7 @@ namespace NJBC.Web.App.Label
             services.AddScoped<ISemEvalRepository, SemEvalRepository>();
 
             services.AddDbContext<NJBC_DBContext>(x =>
-            x.UseSqlServer(
-                Configuration.GetConnectionString("DefaultConnection"))
+            x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             .UseLazyLoadingProxies());
         }
 

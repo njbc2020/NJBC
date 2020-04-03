@@ -7,6 +7,12 @@ using System.Linq;
 using Newtonsoft.Json;
 using System.IO;
 using System.Globalization;
+using NJBC.Services.Iservices;
+using NJBC.Services.services;
+using NJBC.DataLayer.Repository;
+using NJBC.DataLayer.IRepository;
+using NJBC.DataLayer.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace NJBC.Services.Crawler
 {
@@ -18,7 +24,7 @@ namespace NJBC.Services.Crawler
         public void StartCrawling()
         {
             List<TopicLink> links = new List<TopicLink>();
-            links = GetTopics(new List<int> { 116 }); // گرفتن لیست تاپیک ها
+            links = GetTopics(new List<int> { 115 }); // گرفتن لیست تاپیک ها
 
             Console.WriteLine("Topic Number: " + links.Count);
             foreach (var link in links)
@@ -69,6 +75,16 @@ namespace NJBC.Services.Crawler
                             // البته این عملیات در موقع توکنایز کردن هم کاربرد دارد و نوعی پیش پردازش بحساب می آید
                             string[] _tempStrArray = s.Select(x => x.InnerText.Trim().Replace("\r\n", "").Replace("\t", " . ").Replace(",", " . ").Replace("&nbsp;", " ").Replace("\n", " . ")).ToList().Where(x => !string.IsNullOrEmpty(x)).ToArray();
                             description = string.Join(". ", _tempStrArray).Replace("  ", " ").Replace(".. ", ". ").Replace(".. ", ". ").Replace(".. ", ". ");
+                        }
+
+                        var nickName = doc.GetElementbyId("topic").SelectSingleNode(
+                            "//div[@class='col-xs-12 col-sm-12 offset-sm-0 offset-md-0 col-md-4 col-lg-4 col-xl-3 p-x-0 topic-post__statistical pull-sm-left pull-md-right']" +
+                            "//div[@class='col-xs-12 topic-post__user-info user-info']" +
+                            "//a[@class='col-xs-9 col-md-12 text-md-center text-xs-right nickname']"
+                           );
+                        if (nickName != null && !string.IsNullOrEmpty(nickName.InnerText))
+                        {
+                            topic.NickName = nickName.InnerText.Replace("\r\n", "").Trim();
                         }
 
                         var createDate = doc.GetElementbyId("topic").SelectSingleNode(
@@ -139,6 +155,7 @@ namespace NJBC.Services.Crawler
                                 maxId = ss > maxId ? ss : maxId;
                             }
                         }
+                        Console.Write($"Conut: {maxId}   \t");
                         for (int i = 1; i < maxId + 1; i++)
                         {
                             msgs.AddRange(getAnswersFromTopicId(link.TopicId, i));
@@ -227,6 +244,39 @@ namespace NJBC.Services.Crawler
                 //csvAll += record;
             }
             return csv;
+        }
+        #endregion
+
+        #region 03 Import Json To Database
+        public void ImportJsonToDB()
+        {
+            //ISemEvalRepository SemEval = new SemEvalRepository();
+            ////Topic topic = new Topic();
+            //string fileContent = "";
+            //string filePath = "";
+            //List<string> filePaths = new List<string>();
+            //string path1 = Path.Combine(@"E:\116", "116");
+            //if (Directory.Exists(path1))
+            //{
+            //    filePaths = Directory.GetFiles(path1, "*.json").ToList();
+            //}
+            //else if (!Directory.Exists(path1))
+            //    Directory.CreateDirectory(path1);
+
+            //if (filePaths.Count > 0)
+            //{
+            //    for (int i = 0; i < filePaths.Count; i++)
+            //    {
+            //        string readText = File.ReadAllText(filePaths[i]);
+            //        var topic = JsonConvert.DeserializeObject<Topic>(readText);
+            //        var searchRes = SemEval.GetRelCommentByIdAsync(1);
+            //        SemEval.AddQuestion(topic);
+            //        //if (searchRes == null || searchRes.Count()==0)
+            //        //{
+                        
+            //        //}
+            //    }
+            //}
         }
         #endregion
 
@@ -509,6 +559,7 @@ namespace NJBC.Services.Crawler
                 }
                 msgs.Add(msg1);
             }
+            Console.Write("\r{0}   ", id);
             return msgs;
         }
         #endregion

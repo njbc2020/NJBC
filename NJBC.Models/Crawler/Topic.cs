@@ -5,6 +5,7 @@ namespace NJBC.Models.Crawler
 {
     public class Topic
     {
+        public string NickName { get; set; } // Username
         public string Question { get; set; }
         public string Description { get; set; }
         public string DescriptionClean { get; set; }

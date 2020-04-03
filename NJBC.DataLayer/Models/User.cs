@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.EntityFrameworkCore.SqlServer.Design;
+using NJBC.DataLayer.Models.Semeval2015;
 
 namespace NJBC.DataLayer.Models
 {
@@ -12,6 +13,7 @@ namespace NJBC.DataLayer.Models
         public User()
         {
             OrgQuestions = new HashSet<OrgQuestion>();
+            Questions = new HashSet<Question>();
         }
 
         [Key]
@@ -22,5 +24,6 @@ namespace NJBC.DataLayer.Models
         public DateTime LastDatetime { get; set; }
 
         public virtual ICollection<OrgQuestion> OrgQuestions { get; set; }
+        public virtual ICollection<Question> Questions { get; set; }
     }
 }
