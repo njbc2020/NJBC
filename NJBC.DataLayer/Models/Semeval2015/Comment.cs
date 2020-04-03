@@ -19,6 +19,7 @@ namespace NJBC.DataLayer.Models.Semeval2015
         public string CBody { get; set; }
         public string CBodyClean { get; set; }
         public string CUsername { get; set; }
+        public DateTime? LabelDate { get; set; }
 
         //[ForeignKey("ReplayComment")]
         public long? ReplayCommentId { get; set; }

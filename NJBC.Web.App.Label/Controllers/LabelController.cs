@@ -24,5 +24,11 @@ namespace NJBC.Web.App.Label.Controllers
             var rng = new Random();
             return View(s);
         }
+
+        public JsonResult SetLabel(long commentId, int userId, string label)
+        {
+            var s = SemEvalRepository.SetLabelComment(5,label,userId);
+            return Json("");
+        }
     }
 }

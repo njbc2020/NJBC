@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NJBC.DataLayer.Models;
 
 namespace NJBC.DataLayer.Migrations
 {
     [DbContext(typeof(NJBC_DBContext))]
-    partial class NJBC_DBContextModelSnapshot : ModelSnapshot
+    [Migration("20200403203955_AddProperty-Reject")]
+    partial class AddPropertyReject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

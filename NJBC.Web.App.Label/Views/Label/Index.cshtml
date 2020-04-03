@@ -1,4 +1,4 @@
-﻿@model NJBC.DataLayer.Models.RelQuestion
+﻿@model NJBC.DataLayer.Models.Semeval2015.Question
 
 @{
     ViewData["Title"] = "Label";
@@ -6,25 +6,25 @@
 
 <div class="row">
     <div class="col-12">
-        @if (Model.Orgq != null)
+        @if (Model != null)
         {
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="#">خانه</a></li>
                     <li class="breadcrumb-item"><a href="#">تالار نامزدی</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@Model.Orgq.OrgQsubject</li>
+                    <li class="breadcrumb-item active" aria-current="page">@Model.QCATEGORY</li>
                 </ol>
             </nav>
             <div class="card text-white bg-dark mb-6">
                 <div class="card-header"><i class="fa fa-question"></i> پرسش:</div>
                 <div class="card-body">
-                    <h5 class="card-title">@Model.Orgq.OrgQbody</h5>
+                    <h5 class="card-title">@Model.QSubject</h5>
                     <p class="card-text">
                         <br />
                         <span class="btn btn-sm btn-outline-warning">
                             <i class="fa fa-info-circle"></i>&nbsp; شرح:
                         </span>
-                        @Model.RelQbody
+                        @Model.QBody
                     </p>
                 </div>
             </div>
@@ -43,26 +43,26 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.RelComment)
+            @foreach (var item in Model.Comments)
             {
                 <tr>
                     <td>
                         <div>
                             <div style="width:100px; height:100px; border-radius:50%; background-color:darkgray; text-align:center">
-                                <span class="fa fa-2x fa-user-alt text-white"></span><h6>@item.RelcUsername</h6>
+                                <span class="fa fa-2x fa-user-alt text-white"></span><h6>@item.CUsername</h6>
                             </div>
 
                             <div class=""></div>
                         </div>
                     </td>
-                    <td id="cm-@item.RelcId">
+                    <td id="cm-@item.CommentId">
                         <strong class="btn btn-sm btn-primary">پاسخ: </strong>
-                        <p class="text-comment">@item.RelCtext</p>
+                        <p class="text-comment">@item.CBodyClean</p>
                     </td>
                     <td>
-                        <button type="button" style="direction:ltr" class="btn btn-outline-success btn-action btn-label btn-good" comment-id="@item.RelcId" btn-label="Good"><i class="fa fa-check"></i> Good</button>
-                        <button type="button" style="direction:ltr" class="btn btn-outline-dark btn-action btn-label btn-good" comment-id="@item.RelcId" btn-label="PotentiallyUseful"><i class="fa fa-comment"></i> PotentiallyUseful</button>
-                        <button type="button" style="direction:ltr" class="btn btn-outline-danger btn-action btn-label btn-good" comment-id="@item.RelcId" btn-label="Bad"><i class="fa fa-times"></i> Bad</button>
+                        <button type="button" style="direction:ltr" class="btn btn-outline-success btn-action btn-label btn-good" comment-id="@item.CommentId" btn-label="Good"><i class="fa fa-check"></i> Good</button>
+                        <button type="button" style="direction:ltr" class="btn btn-outline-dark btn-action btn-label btn-good" comment-id="@item.CommentId" btn-label="PotentiallyUseful"><i class="fa fa-comment"></i> PotentiallyUseful</button>
+                        <button type="button" style="direction:ltr" class="btn btn-outline-danger btn-action btn-label btn-good" comment-id="@item.CommentId" btn-label="Bad"><i class="fa fa-times"></i> Bad</button>
                     </td>
                 </tr>
             }

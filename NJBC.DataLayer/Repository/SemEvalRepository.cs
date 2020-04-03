@@ -24,7 +24,7 @@ namespace NJBC.DataLayer.Repository
         }
         #endregion
 
-        #region SemEval 2015
+        #region SemEval 2015 - Question
         public async Task AddQuestion(Topic topic)
         {
             try
@@ -82,7 +82,6 @@ namespace NJBC.DataLayer.Repository
             if (saveNow)
                 await dBContext.SaveChangesAsync().ConfigureAwait(false);
         }
-
         public async Task AddQuestions(List<Question> input, bool saveNow = true)
         {
             dBContext.Questions.AddRange(input);
@@ -90,17 +89,14 @@ namespace NJBC.DataLayer.Repository
             if (saveNow)
                 dBContext.SaveChanges();//.ConfigureAwait(false);
         }
-
         public async Task<Question> GetQuestionByIdAsync(int id)
         {
             return await dBContext.Questions.FindAsync(id);
         }
-
         public async Task<List<Question>> GetQuestionByIdAsync(long[] ids)
         {
             return dBContext.Questions.Where(x => ids.Contains(x.QuestionId)).ToList();
         }
-
         public List<Question> QuestionSearchAsync(string category, string subject)
         {
             return dBContext.Questions.Where(x =>
@@ -108,7 +104,52 @@ namespace NJBC.DataLayer.Repository
                                                     (string.IsNullOrEmpty(subject) || (!string.IsNullOrEmpty(subject) && x.QUsername == subject))
                                                     ).ToList();
         }
+        public async Task<Question> GetActiveQuestion(int userId)
+        {
+            var result = dBContext.Questions.Where(x => !x.Reject && x.Active && x.UserId == userId && x.Label && !x.LabelComplete);
+            if (result.Any())
+                return result.FirstOrDefault();
+            else
+                return dBContext.Questions.Where(x => !x.Reject && x.Active && !x.Label).FirstOrDefault();
+        }
+        public async Task<bool> RejectQuestion(long questionId)
+        {
+            try
+            {
+                var question = dBContext.Questions.Find(questionId);
+                if (question == null)
+                    return false;
+                question.Reject = true;
+                question.Active = false;
+                dBContext.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
 
+        }
+        public async Task<bool> SetLabelCompelete(long questionId)
+        {
+            try
+            {
+                var question = dBContext.Questions.Find(questionId);
+                if (question == null)
+                    return false;
+                question.LabelComplete = true;
+                question.LabelCompleteDateTime = DateTime.Now;
+                dBContext.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #region SemEval 2015 - Comment
         public async Task AddComment(Comment input, bool saveNow = true)
         {
             await dBContext.Comments.AddAsync(input);
@@ -116,7 +157,6 @@ namespace NJBC.DataLayer.Repository
             if (saveNow)
                 await dBContext.SaveChangesAsync().ConfigureAwait(false);
         }
-
         public async Task AddComments(List<Comment> input, bool saveNow = true)
         {
             if (true)
@@ -149,17 +189,14 @@ namespace NJBC.DataLayer.Repository
                 }
             }
         }
-
         public async Task<Comment> GetCommentByIdAsync(int id)
         {
             return await dBContext.Comments.FindAsync(id);
         }
-
         public async Task<List<Comment>> GetCommentByIdAsync(long[] ids)
         {
             return dBContext.Comments.Where(x => ids.Contains(x.CommentId)).ToList();
         }
-
         public List<Comment> SearchCommentAsync(string subejct, string username)
         {
             return dBContext.
@@ -167,6 +204,23 @@ namespace NJBC.DataLayer.Repository
                               (string.IsNullOrEmpty(subejct) || (!string.IsNullOrEmpty(subejct) && x.CSubject == subejct)) &&
                               (string.IsNullOrEmpty(username) || (!string.IsNullOrEmpty(username) && x.CUsername == username))
                               ).ToList();
+        }
+        public async Task<bool> SetLabelComment(long commentId, string label, int userId)
+        {
+            try
+            {
+                var comment = dBContext.Comments.Find(commentId);
+                if (comment == null)
+                    return false;
+                comment.CGOLD = label;
+                comment.LabelDate = DateTime.Now;
+                dBContext.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
         #endregion
 

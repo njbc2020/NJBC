@@ -29,6 +29,13 @@ namespace NJBC.DataLayer.Models.Semeval2015
         [ForeignKey("User")]
         public int? UserId { get; set; }
 
+        public bool Label { get; set; }
+        public DateTime? LabelDateTime { get; set; }
+        public bool LabelComplete { get; set; }
+        public DateTime? LabelCompleteDateTime { get; set; }
+        public bool Active { get; set; }
+        public bool Reject { get; set; }
+
         public virtual User User { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }

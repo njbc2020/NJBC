@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NJBC.DataLayer.Models;
 
 namespace NJBC.DataLayer.Migrations
 {
     [DbContext(typeof(NJBC_DBContext))]
-    partial class NJBC_DBContextModelSnapshot : ModelSnapshot
+    [Migration("20200403163247_AddProperty-Label-Active")]
+    partial class AddPropertyLabelActive
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -195,9 +197,6 @@ namespace NJBC.DataLayer.Migrations
                     b.Property<string>("CUsername")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("LabelDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<long>("QuestionId")
                         .HasColumnType("bigint");
 
@@ -221,12 +220,6 @@ namespace NJBC.DataLayer.Migrations
 
                     b.Property<bool>("Label")
                         .HasColumnType("bit");
-
-                    b.Property<bool>("LabelComplete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LabelCompleteDateTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("LabelDateTime")
                         .HasColumnType("datetime2");
@@ -257,9 +250,6 @@ namespace NJBC.DataLayer.Migrations
 
                     b.Property<string>("QUsername")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Reject")
-                        .HasColumnType("bit");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
