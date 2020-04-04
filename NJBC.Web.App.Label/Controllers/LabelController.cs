@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using NJBC.DataLayer.IRepository;
 using NJBC.DataLayer.Models;
 using NJBC.DataLayer.Repository;
+using NJBC.Models.DTO.Web;
 
 namespace NJBC.Web.App.Label.Controllers
 {
@@ -17,18 +18,23 @@ namespace NJBC.Web.App.Label.Controllers
             this.SemEvalRepository = SemEvalRepository;
         }
 
-        public IActionResult Index(string id)
+        [HttpGet]
+        public IActionResult Index(int id)
         {
-            var s = SemEvalRepository.SearchRelQuestionAsync("","").Result.FirstOrDefault();
+            ViewBag.UserId = id;
+            
+            var s = SemEvalRepository.GetActiveQuestion(id).Result;
 
-            var rng = new Random();
             return View(s);
         }
 
-        public JsonResult SetLabel(long commentId, int userId, string label)
+        [HttpPost]
+        public IActionResult SetLabel([FromBody]SetLabelCommentParam param)
         {
-            var s = SemEvalRepository.SetLabelComment(5,label,userId);
-            return Json("");
+            var s = SemEvalRepository.SetLabelComment(param).Result;
+            if (!s)
+                return BadRequest();
+            return Json(new { Message = "ثبت شد" });
         }
     }
 }

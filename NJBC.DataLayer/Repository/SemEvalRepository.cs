@@ -2,6 +2,7 @@
 using NJBC.DataLayer.Models;
 using NJBC.DataLayer.Models.Semeval2015;
 using NJBC.Models.Crawler;
+using NJBC.Models.DTO.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -110,7 +111,10 @@ namespace NJBC.DataLayer.Repository
             if (result.Any())
                 return result.FirstOrDefault();
             else
-                return dBContext.Questions.Where(x => !x.Reject && x.Active && !x.Label).FirstOrDefault();
+            {
+                var s= dBContext.Questions.Where(x => !x.Reject && x.Active && !x.Label).FirstOrDefault();
+                return s;
+            }
         }
         public async Task<bool> RejectQuestion(long questionId)
         {
@@ -205,14 +209,14 @@ namespace NJBC.DataLayer.Repository
                               (string.IsNullOrEmpty(username) || (!string.IsNullOrEmpty(username) && x.CUsername == username))
                               ).ToList();
         }
-        public async Task<bool> SetLabelComment(long commentId, string label, int userId)
+        public async Task<bool> SetLabelComment(SetLabelCommentParam param)
         {
             try
             {
-                var comment = dBContext.Comments.Find(commentId);
+                var comment = dBContext.Comments.Find(param.CommentId);
                 if (comment == null)
                     return false;
-                comment.CGOLD = label;
+                comment.CGOLD = param.Label;
                 comment.LabelDate = DateTime.Now;
                 dBContext.SaveChanges();
                 return true;

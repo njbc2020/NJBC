@@ -88,6 +88,14 @@ body {
         padding-right: 11px;
         color: #200b63;
     }
+
+.text-comment-replay {
+    font-size: 12px;
+    font-family: BYekan,'BYekan',tahoma;
+    border-radius: 10px;
+    background-color: #f8fec8;
+    padding:5px;
+}
 .btn-action{
     margin: 10px 5px 5px 5px;
 }

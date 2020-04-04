@@ -8,6 +8,7 @@
     <div class="col-12">
         @if (Model != null)
         {
+            <input type="hidden" id="UserId" value="@ViewBag.UserId" />
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="#">خانه</a></li>
@@ -28,7 +29,7 @@
                     </p>
                 </div>
             </div>
-            
+
         }
     </div>
     <div class="col-12"><hr /></div>
@@ -56,7 +57,14 @@
                         </div>
                     </td>
                     <td id="cm-@item.CommentId">
-                        <strong class="btn btn-sm btn-primary">پاسخ: </strong>
+                        <strong class="btn btn-sm btn-primary">
+                            پاسخ @item.CommentId
+                        </strong>
+                        @if (item.ReplayCommentId.HasValue)
+                        {
+                            <a class="btn btn-link" href="#cm-@item.ReplayCommentId.Value"> پاسخ به سوال @item.ReplayCommentId.Value</a><br />
+                            <div class="text-comment-replay"><i class="fa fa-quote-right"></i> @(Model.Comments.Where(x => x.CommentId == item.ReplayCommentId.Value).FirstOrDefault().CBodyClean) <i class="fa fa-quote-left"></i></div>
+                        }
                         <p class="text-comment">@item.CBodyClean</p>
                     </td>
                     <td>
@@ -70,5 +78,73 @@
     </table>
 </div>
 <script>
+    $(".btn-label").click(function () {
+        var label = $(this).attr("btn-label");
+        var commentId = $(this).attr("comment-id");
+        var userId = $("#UserId").val();
+        $(this).addClass("disabled");
+
+        params = '{"CommentId": ' + commentId + ', "UserId":' + userId + ' , "Label": "' + label + '" }';
+
+        $.ajax({
+            type: "POST",
+            url: "/Label/SetLabel",
+            data: params,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data) {
+                    $.toast({
+                        title: 'Notice!',
+                        subtitle: label,
+                        content: 'ثبت شد',
+                        type: 'success',
+                        delay: 750,
+                        img: {
+                            class: 'rounded',
+                            title: 'ثبت شد',
+                            alt: 'Alternative'
+                        },
+                        pause_on_hover: false
+                    });
+
+                    ClearAspect();
+                }
+                else {
+                    $.toast({
+                        title: 'Notice!',
+                        subtitle: label,
+                        content: 'نا موفق',
+                        type: 'danger',
+                        delay: 750,
+                        img: {
+                            class: 'rounded',
+                            title: 'نا موفق',
+                            alt: 'Alternative'
+                        },
+                        pause_on_hover: false
+                    });
+                }
+            },
+            failure: function (errMsg) {
+                $.toast({
+                    title: 'Notice!',
+                    subtitle: label,
+                    content: 'نا موفق',
+                    type: 'danger',
+                    delay: 750,
+                    img: {
+                        class: 'rounded',
+                        title: 'نا موفق',
+                        alt: 'Alternative'
+                    },
+                    pause_on_hover: false
+                });
+            }
+        });
+    });
+
+
+
 
 </script>

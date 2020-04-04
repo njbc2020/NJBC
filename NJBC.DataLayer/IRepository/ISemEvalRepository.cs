@@ -1,6 +1,7 @@
 ﻿using NJBC.DataLayer.Models;
 using NJBC.DataLayer.Models.Semeval2015;
 using NJBC.Models.Crawler;
+using NJBC.Models.DTO.Web;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -26,7 +27,7 @@ namespace NJBC.DataLayer.IRepository
         Task<Comment> GetCommentByIdAsync(int id);
         Task<List<Comment>> GetCommentByIdAsync(long[] ids);
         List<Comment> SearchCommentAsync(string name, string text);
-        Task<bool> SetLabelComment(long commentId, string label, int userId);
+        Task<bool> SetLabelComment(SetLabelCommentParam param);
         #endregion
 
         #region SemEval 2016
