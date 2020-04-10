@@ -107,12 +107,16 @@ namespace NJBC.DataLayer.Repository
         }
         public async Task<Question> GetActiveQuestion(int userId)
         {
+            if (!dBContext.Users.Find(userId).Active)
+            {
+                return null;
+            }
             var result = dBContext.Questions.Where(x => !x.Reject && x.Active && x.UserId == userId && x.Label && !x.LabelComplete);
             if (result.Any())
                 return result.FirstOrDefault();
             else
             {
-                var s= dBContext.Questions.Where(x => !x.Reject && x.Active && !x.Label).FirstOrDefault();
+                var s= dBContext.Questions.Where(x => !x.Reject && x.Active && !x.Label && !x.LabelComplete).FirstOrDefault();
                 return s;
             }
         }
@@ -132,15 +136,33 @@ namespace NJBC.DataLayer.Repository
             {
                 return false;
             }
-
         }
-        public async Task<bool> SetLabelCompelete(long questionId)
+        public async Task<bool> ActiveQuestion(long questionId)
         {
             try
             {
                 var question = dBContext.Questions.Find(questionId);
                 if (question == null)
                     return false;
+                question.Reject = false;
+                question.Active = true;
+                dBContext.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        public async Task<bool> SetLabelCompelete(CompleteQuestionParam param)
+        {
+            try
+            {
+                var question = dBContext.Questions.Find(param.QuestionId);
+                if (question == null)
+                    return false;
+
+                question.UserId = param.UserId;
                 question.LabelComplete = true;
                 question.LabelCompleteDateTime = DateTime.Now;
                 dBContext.SaveChanges();
@@ -150,6 +172,10 @@ namespace NJBC.DataLayer.Repository
             {
                 return false;
             }
+        }
+        public async Task<List<Question>> GetQuestionList(int count)
+        {
+            return dBContext.Questions.Where(x => !x.Active && !x.Reject && !x.Label).Take(count).ToList();
         }
         #endregion
 

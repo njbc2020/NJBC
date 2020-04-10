@@ -19,12 +19,12 @@ namespace NJBC.Web.App.Label.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(int id)
+        public IActionResult L(int id)
         {
-            ViewBag.UserId = id;
-            
             var s = SemEvalRepository.GetActiveQuestion(id).Result;
-
+            if (s == null)
+                return Redirect("/");
+            ViewBag.UserId = id;
             return View(s);
         }
 
@@ -32,6 +32,15 @@ namespace NJBC.Web.App.Label.Controllers
         public IActionResult SetLabel([FromBody]SetLabelCommentParam param)
         {
             var s = SemEvalRepository.SetLabelComment(param).Result;
+            if (!s)
+                return BadRequest();
+            return Json(new { Message = "ثبت شد" });
+        }
+
+        [HttpPost]
+        public IActionResult NextQuestion([FromBody]CompleteQuestionParam param)
+        {
+            var s = SemEvalRepository.SetLabelCompelete(param).Result;
             if (!s)
                 return BadRequest();
             return Json(new { Message = "ثبت شد" });

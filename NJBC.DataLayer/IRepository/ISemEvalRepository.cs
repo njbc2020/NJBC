@@ -20,7 +20,9 @@ namespace NJBC.DataLayer.IRepository
         List<Question> QuestionSearchAsync(string category, string subject);
         Task<Question> GetActiveQuestion(int userId);
         Task<bool> RejectQuestion(long questionId);
-        Task<bool> SetLabelCompelete(long questionId);
+        Task<bool> ActiveQuestion(long questionId);
+        Task<bool> SetLabelCompelete(CompleteQuestionParam questionId);
+        Task<List<Question>> GetQuestionList(int count);
 
         Task AddComment(Comment input, bool saveNow = true);
         Task AddComments(List<Comment> input, bool saveNow = true);
