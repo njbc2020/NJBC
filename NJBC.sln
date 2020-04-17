@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NJBC.Web.App.Label", "NJBC.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NJBC.App.Crawler", "NJBC.App.Crawler\NJBC.App.Crawler.csproj", "{6CC862DA-78EE-4A21-9BC2-86E70C01D7FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NJBC.Common", "NJBC.Common\NJBC.Common.csproj", "{0A9DBE4F-6C77-4E11-A613-7741AA08BBA2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{6CC862DA-78EE-4A21-9BC2-86E70C01D7FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CC862DA-78EE-4A21-9BC2-86E70C01D7FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CC862DA-78EE-4A21-9BC2-86E70C01D7FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A9DBE4F-6C77-4E11-A613-7741AA08BBA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A9DBE4F-6C77-4E11-A613-7741AA08BBA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A9DBE4F-6C77-4E11-A613-7741AA08BBA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A9DBE4F-6C77-4E11-A613-7741AA08BBA2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

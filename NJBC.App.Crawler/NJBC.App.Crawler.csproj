@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NJBC.Common\NJBC.Common.csproj" />
     <ProjectReference Include="..\NJBC.Models\NJBC.Models.csproj" />
     <ProjectReference Include="..\NJBC.Services\NJBC.Services.csproj" />
   </ItemGroup>

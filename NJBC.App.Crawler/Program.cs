@@ -15,6 +15,7 @@ using System.IO.Compression;
 using System.Diagnostics;
 using System.Threading;
 using NJBC.DataLayer.Models.Semeval2015;
+using NJBC.Common;
 
 namespace NJBC.App.Crawler
 {
@@ -99,13 +100,14 @@ namespace NJBC.App.Crawler
                                     usersDic.Add(topic.NickName, userid);
                                     usersIdDic.Add(userid, topic.NickName);
                                 }
+
                                 Question q = new Question()
                                 {
                                     QuestionId = qc++,
                                     QID = topic.TopicId.ToString(),
                                     QSubject = topic.Question,
                                     QBody = topic.Description,
-                                    QCATEGORY = "116",
+                                    QCATEGORY = forum.ToString(),
                                     QDATE = topic.CreateDatetime,
                                     QGOLD_YN = "Not Applicable",
                                     QTYPE = "General",
@@ -113,35 +115,59 @@ namespace NJBC.App.Crawler
                                     QUSERID = usersDic[topic.NickName]
                                 };
 
-                                foreach (var message in topic.Messages)
+                                List<Comment> _comments = new List<Comment>();
+                                using (var textHelper = new TextHelper())
                                 {
-                                    if (string.IsNullOrEmpty(message.Name) || string.IsNullOrEmpty(message.Text))
-                                        continue;
-                                    if (message.MessageId == null)
-                                        continue;
-                                    if (!usersDic.ContainsKey(message.Name))
+                                    foreach (var message in topic.Messages)
                                     {
-                                        long userid = uc++;
-                                        usersDic.Add(message.Name, userid);
-                                        usersIdDic.Add(userid, message.Name);
+                                        if (string.IsNullOrEmpty(message.Name) || string.IsNullOrEmpty(message.Text))
+                                            continue;
+                                        if (message.MessageId == null)
+                                            continue;
+                                        if (!usersDic.ContainsKey(message.Name))
+                                        {
+                                            long userid = uc++;
+                                            usersDic.Add(message.Name, userid);
+                                            usersIdDic.Add(userid, message.Name);
+                                        }
+                                        string cleanText = textHelper.CleanReview(message.TextClean);
+                                        Comment cm = new Comment()
+                                        {
+                                            CommentId = message.MessageId,
+                                            CID = message.MessageId.ToString(),
+                                            CBody = message.Text,
+                                            CBodyClean = cleanText,
+                                            CUsername = message.Name,
+                                            CUSERID = usersDic[message.Name],
+                                            CGOLD = "",
+                                            CGOLD_YN = "",
+                                            CSubject = "",
+                                            ReplayCommentId = message.ReplayId,
+                                            QuestionId = q.QuestionId,
+                                        };
+                                        if (!textHelper.RemoveSingleEmoji(cm.CBodyClean))
+                                        {
+                                            _comments.Add(cm);
+                                        }
                                     }
-                                    Comment cm = new Comment()
-                                    {
-                                        CommentId = message.MessageId,
-                                        CID = message.MessageId.ToString(),
-                                        CBody = message.Text,
-                                        CBodyClean = message.TextClean,
-                                        CUsername = message.Name,
-                                        CUSERID = usersDic[message.Name],
-                                        CGOLD = "",
-                                        CGOLD_YN = "",
-                                        CSubject = "",
-                                        ReplayCommentId = message.ReplayId,
-                                        QuestionId = q.QuestionId,
-                                    };
-                                    comments.Add(cm);
                                 }
+                                var _cms = _comments.GroupBy(x => x.CommentId).Select(x => x.First()).ToList();
+                                var _cms1 = _cms.GroupBy(x => x.CBodyClean).Select(x => x.First()).ToList();
+                                comments.AddRange(_cms1);
                                 questions.Add(q);
+
+                                if (comments.Count() > 10000)
+                                {
+                                    rep.AddQuestions(questions);
+                                    Thread.Sleep(2 * 1000);
+                                    var cms_1 = comments.GroupBy(x => x.CommentId).Select(x => x.First()).ToList();
+                                    rep.AddComments(cms_1);
+                                    questions.Clear();
+                                    comments.Clear();
+                                    _comments.Clear();
+                                    _cms.Clear();
+                                    Console.Write("|");
+                                }
                             }
                             stopWatch.Stop();
 
@@ -153,10 +179,14 @@ namespace NJBC.App.Crawler
                     }
                 }
             }
-            rep.AddQuestions(questions);
-            Thread.Sleep(2 * 1000);
-            var cms=comments.GroupBy(x => x.CommentId).Select(x => x.First()).ToList();
-            rep.AddComments(cms);
+            if (questions.Count > 1)
+                rep.AddQuestions(questions);
+            //Thread.Sleep(2 * 1000);
+            if (comments.Count > 1)
+            {
+                var cms = comments.GroupBy(x => x.CommentId).Select(x => x.First()).ToList();
+                rep.AddComments(cms);
+            }
             int aaaaa = 55;
         }
         #endregion
