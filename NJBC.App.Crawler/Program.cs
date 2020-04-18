@@ -156,18 +156,18 @@ namespace NJBC.App.Crawler
                                 comments.AddRange(_cms1);
                                 questions.Add(q);
 
-                                if (comments.Count() > 10000)
-                                {
-                                    rep.AddQuestions(questions);
-                                    Thread.Sleep(2 * 1000);
-                                    var cms_1 = comments.GroupBy(x => x.CommentId).Select(x => x.First()).ToList();
-                                    rep.AddComments(cms_1);
-                                    questions.Clear();
-                                    comments.Clear();
-                                    _comments.Clear();
-                                    _cms.Clear();
-                                    Console.Write("|");
-                                }
+                                //if (comments.Count() > 10000)
+                                //{
+                                //    rep.AddQuestions(questions);
+                                //    Thread.Sleep(2 * 1000);
+                                //    var cms_1 = comments.GroupBy(x => x.CommentId).Select(x => x.First()).ToList();
+                                //    rep.AddComments(cms_1);
+                                //    questions.Clear();
+                                //    comments.Clear();
+                                //    _comments.Clear();
+                                //    _cms.Clear();
+                                //    Console.Write("|");
+                                //}
                             }
                             stopWatch.Stop();
 
