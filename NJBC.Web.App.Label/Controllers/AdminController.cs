@@ -50,6 +50,15 @@ namespace NJBC.Web.App.Label.Controllers
             return Ok("ok");
         }
 
+        [HttpPost]
+        public IActionResult AdvQuestion(int id)
+        {
+            var s = SemEvalRepository.AdvQuestion(id).Result;
+            if (!s)
+                return BadRequest();
+            return Ok("ok");
+        }
+
         private string token
         {
             get

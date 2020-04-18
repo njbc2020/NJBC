@@ -63,10 +63,12 @@
                         <strong class="btn btn-sm btn-primary">
                             پاسخ @item.CommentId
                         </strong>
-                        @if (!string.IsNullOrEmpty(item.CGOLD))
-                        {
-                            <button type="button" class="btn btn-sm btn-outline-success">@item.CGOLD</button>
-                        }
+                        <span id="sp-@item.CommentId">
+                            @if (!string.IsNullOrEmpty(item.CGOLD))
+                            {
+                                <button type="button" class="btn btn-sm btn-outline-success">@item.CGOLD</button>
+                            }
+                        </span>
                         @if (item.ReplayCommentId.HasValue)
                         {
                             <a class="btn btn-link" href="#cm-@item.ReplayCommentId.Value"> پاسخ به سوال @item.ReplayCommentId.Value</a><br />
@@ -96,6 +98,7 @@
             var userId = $("#UserId").val();
             $(this).addClass("btn-lg");
             $(this).addClass("disabled");
+            $("#sp-" + commentId).html('<button type="button" class="btn btn-sm btn-outline-success">' + label + '</button>');
 
             params = '{"CommentId": ' + commentId + ', "UserId":' + userId + ' , "Label": "' + label + '" }';
 

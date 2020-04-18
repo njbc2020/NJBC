@@ -177,6 +177,22 @@ namespace NJBC.DataLayer.Repository
         {
             return dBContext.Questions.Where(x => !x.Active && !x.Reject && !x.Label).Take(count).ToList();
         }
+        public async Task<bool> AdvQuestion(long questionId)
+        {
+            try
+            {
+                var question = dBContext.Questions.Find(questionId);
+                if (question == null)
+                    return false;
+                question.IsAdv = true;
+                dBContext.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
         #endregion
 
         #region SemEval 2015 - Comment

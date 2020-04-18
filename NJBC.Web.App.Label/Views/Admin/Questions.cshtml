@@ -142,11 +142,13 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.User.UserId)
                     </td>*@
-                <td>
-                    <button type="button" class="btn btn-success btn-active" style="margin-bottom:20px;" qid="@item.QuestionId">Active</button>
+            <td>
+                <button type="button" class="btn btn-success btn-active" style="margin-bottom:20px;" qid="@item.QuestionId">Active</button>
 
-                    <button type="button" class="btn btn-danger btn-reject" qid="@item.QuestionId">Reject</button>
-                </td>
+                <button type="button" class="btn btn-danger btn-reject" qid="@item.QuestionId">Reject</button>
+
+                <button type="button" class="btn btn-warning btn-adv" qid="@item.QuestionId">Adv</button>
+            </td>
             </tr>
         }
     </tbody>
@@ -217,6 +219,64 @@
         $.ajax({
             type: "POST",
             url: "/Admin/ActiveQuestion/" + questionId,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data) {
+                    $.toast({
+                        title: 'Notice!',
+                        subtitle: "Success ",
+                        content: 'ثبت شد',
+                        type: 'success',
+                        delay: 750,
+                        img: {
+                            class: 'rounded',
+                            title: 'ثبت شد',
+                            alt: 'Alternative'
+                        },
+                        pause_on_hover: false
+                    });
+                }
+                else {
+                    $.toast({
+                        title: 'Notice!',
+                        subtitle: "Sorry ",
+                        content: 'نا موفق',
+                        type: 'danger',
+                        delay: 750,
+                        img: {
+                            class: 'rounded',
+                            title: 'نا موفق',
+                            alt: 'Alternative'
+                        },
+                        pause_on_hover: false
+                    });
+                }
+            },
+            failure: function (errMsg) {
+                $.toast({
+                    title: 'Notice!',
+                    subtitle: "Sorry ",
+                    content: 'نا موفق',
+                    type: 'danger',
+                    delay: 750,
+                    img: {
+                        class: 'rounded',
+                        title: 'نا موفق',
+                        alt: 'Alternative'
+                    },
+                    pause_on_hover: false
+                });
+            }
+        });
+    });
+
+    $(".btn-adv").click(function () {
+        var questionId = $(this).attr("qid");
+
+        $.ajax({
+            type: "POST",
+            url: "/Admin/AdvQuestion/" + questionId,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {

@@ -21,6 +21,7 @@ namespace NJBC.DataLayer.IRepository
         Task<Question> GetActiveQuestion(int userId);
         Task<bool> RejectQuestion(long questionId);
         Task<bool> ActiveQuestion(long questionId);
+        Task<bool> AdvQuestion(long questionId);
         Task<bool> SetLabelCompelete(CompleteQuestionParam questionId);
         Task<List<Question>> GetQuestionList(int count);
 

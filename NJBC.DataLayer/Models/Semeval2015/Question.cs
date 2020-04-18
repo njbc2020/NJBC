@@ -35,6 +35,7 @@ namespace NJBC.DataLayer.Models.Semeval2015
         public DateTime? LabelCompleteDateTime { get; set; }
         public bool Active { get; set; }
         public bool Reject { get; set; }
+        public bool IsAdv { get; set; }
 
         public virtual User User { get; set; }
 
