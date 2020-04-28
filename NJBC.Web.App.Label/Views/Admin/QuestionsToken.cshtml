@@ -3,6 +3,29 @@
     ViewData["Title"] = "QuestionsToken";
 }
 
-<h1>جهت ورود کلیک کنید</h1>
-<a href="/Admin/Questions/@ViewBag.token" class="btn btn-lg btn-primary">ورود</a>
+@if (ViewBag.token != null && ViewBag.token == "0")
+{
+    <h1>ورود</h1>
+    <form action="/Admin/QuestionsToken" method="post">
+
+        <div class="form-group">
+            <label id="lblUsername" class="control-label">نام کاربری:</label>
+            <input id="username" name="username" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label id="lblPassword" class="control-label">رمز عبور:</label>
+            <input id="password" name="password" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Login</button>
+        </div>
+    </form>
+}
+@if (ViewBag.token != null && ViewBag.token != "0")
+{
+    <h1>جهت ورود کلیک کنید</h1>
+    <a href="/Admin/Questions/@ViewBag.token" class="btn btn-lg btn-primary">ورود</a>
+}
 

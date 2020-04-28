@@ -18,19 +18,21 @@ namespace NJBC.DataLayer.IRepository
         Task<Question> GetQuestionByIdAsync(int id);
         Task<List<Question>> GetQuestionByIdAsync(long[] ids);
         List<Question> QuestionSearchAsync(string category, string subject);
-        Task<Question> GetActiveQuestion(int userId);
+        Task<Question> GetActiveQuestion(string username);
         Task<bool> RejectQuestion(long questionId);
         Task<bool> ActiveQuestion(long questionId);
         Task<bool> AdvQuestion(long questionId);
         Task<bool> SetLabelCompelete(CompleteQuestionParam questionId);
-        Task<List<Question>> GetQuestionList(int count);
+        Task<List<Question>> GetQuestionList(int count, int page);
+        Task<int> GetQuestionsCount();
 
         Task AddComment(Comment input, bool saveNow = true);
         Task AddComments(List<Comment> input, bool saveNow = true);
-        Task<Comment> GetCommentByIdAsync(int id);
+        Task<Comment> GetCommentByIdAsync(long id);
         Task<List<Comment>> GetCommentByIdAsync(long[] ids);
         List<Comment> SearchCommentAsync(string name, string text);
         Task<bool> SetLabelComment(SetLabelCommentParam param);
+        Task<bool> EditComment(long commentId, string cBodyClean);
         #endregion
 
         #region SemEval 2016
@@ -55,6 +57,10 @@ namespace NJBC.DataLayer.IRepository
         Task<List<RelComment>> GetRelCommentByIdAsync(int[] ids);
         Task<List<RelComment>> SearchRelCommentAsync(string name, string text);
 
+        #endregion
+
+        #region Auth
+        Task<bool> Auth(string username, string password);
         #endregion
     }
 }

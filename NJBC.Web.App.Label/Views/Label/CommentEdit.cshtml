@@ -1,0 +1,30 @@
+﻿@model NJBC.DataLayer.Models.Semeval2015.Comment
+
+@{
+    ViewData["Title"] = "CommentEdit";
+}
+
+<h1>CommentEdit</h1>
+
+<h4>Comment</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CommentEdit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CommentId" />
+            <div class="form-group">
+                <label asp-for="CBodyClean" class="control-label"></label>
+                <textarea asp-for="CBodyClean" class="form-control" rows="10" cols="40"></textarea>
+                <span asp-validation-for="CBodyClean" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

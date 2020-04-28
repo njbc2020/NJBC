@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using NJBC.DataLayer.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using NJBC.DataLayer.Models.Semeval2015;
+using NJBC.Web.App.Label.Models;
 
 namespace NJBC.Web.App.Label.Controllers
 {
@@ -16,18 +17,37 @@ namespace NJBC.Web.App.Label.Controllers
             this.SemEvalRepository = SemEvalRepository;
         }
 
+        [HttpGet]
         public IActionResult QuestionsToken()
         {
-            ViewBag.token = token;
+            ViewBag.token = "0";
             return View();
         }
 
-        public IActionResult Questions(string id)
+        [HttpPost]
+        public IActionResult QuestionsToken(string username, string password)
         {
+            if (SemEvalRepository.Auth(username, password).Result)
+            {
+                ViewBag.token = token;
+                return View();
+            }
+            ViewBag.token = "0";
+            return View();
+        }
+
+        [Route("Admin/Questions/{id}/{page?}")]
+        public IActionResult Questions(string id, int page = 1)
+        {
+            QuestionsVM model = new QuestionsVM();
             if (id == token)
             {
-                var questions = SemEvalRepository.GetQuestionList(50).Result;
-                return View(questions);
+                model.Page = page - 1;
+                model.Count = 1000;
+                model.Questions = SemEvalRepository.GetQuestionList(model.Count, page).Result;
+                model.Max = SemEvalRepository.GetQuestionsCount().Result;
+                model.Token = id;
+                return View(model);
             }
             return Redirect("/");
         }
@@ -63,7 +83,7 @@ namespace NJBC.Web.App.Label.Controllers
         {
             get
             {
-                int hour= DateTime.Now.Hour;
+                int hour = DateTime.Now.Hour + 1;
 
                 if (hour % 2 == 0)
                     hour *= 13;

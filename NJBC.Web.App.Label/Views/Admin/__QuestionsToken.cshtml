@@ -1,0 +1,84 @@
+﻿@model NJBC.DataLayer.Models.Semeval2015.Comment
+
+@{
+    ViewData["Title"] = "QuestionsToken";
+}
+
+<h1>QuestionsToken</h1>
+
+<h4>Comment</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="QuestionsToken">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CommentId" class="control-label"></label>
+                <input asp-for="CommentId" class="form-control" />
+                <span asp-validation-for="CommentId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CID" class="control-label"></label>
+                <input asp-for="CID" class="form-control" />
+                <span asp-validation-for="CID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CUSERID" class="control-label"></label>
+                <input asp-for="CUSERID" class="form-control" />
+                <span asp-validation-for="CUSERID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CGOLD" class="control-label"></label>
+                <input asp-for="CGOLD" class="form-control" />
+                <span asp-validation-for="CGOLD" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CGOLD_YN" class="control-label"></label>
+                <input asp-for="CGOLD_YN" class="form-control" />
+                <span asp-validation-for="CGOLD_YN" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CSubject" class="control-label"></label>
+                <input asp-for="CSubject" class="form-control" />
+                <span asp-validation-for="CSubject" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CBody" class="control-label"></label>
+                <input asp-for="CBody" class="form-control" />
+                <span asp-validation-for="CBody" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CBodyClean" class="control-label"></label>
+                <input asp-for="CBodyClean" class="form-control" />
+                <span asp-validation-for="CBodyClean" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CUsername" class="control-label"></label>
+                <input asp-for="CUsername" class="form-control" />
+                <span asp-validation-for="CUsername" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LabelDate" class="control-label"></label>
+                <input asp-for="LabelDate" class="form-control" />
+                <span asp-validation-for="LabelDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReplayCommentId" class="control-label"></label>
+                <input asp-for="ReplayCommentId" class="form-control" />
+                <span asp-validation-for="ReplayCommentId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="QuestionId" class="control-label"></label>
+                <select asp-for="QuestionId" class ="form-control" asp-items="ViewBag.QuestionId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

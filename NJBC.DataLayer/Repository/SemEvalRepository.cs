@@ -25,6 +25,14 @@ namespace NJBC.DataLayer.Repository
         }
         #endregion
 
+        #region Auth
+        public async Task<bool> Auth(string username, string password)
+        {
+            var res= dBContext.Users.Any(u => u.Username.ToLower() == username.ToLower() && u.Password == password && u.Active);
+            return res;
+        }
+        #endregion
+
         #region SemEval 2015 - Question
         public async Task AddQuestion(Topic topic)
         {
@@ -105,20 +113,39 @@ namespace NJBC.DataLayer.Repository
                                                     (string.IsNullOrEmpty(subject) || (!string.IsNullOrEmpty(subject) && x.QUsername == subject))
                                                     ).ToList();
         }
-        public async Task<Question> GetActiveQuestion(int userId)
+        public async Task<Question> GetActiveQuestion(string username)
         {
-            if (!dBContext.Users.Find(userId).Active)
+            try
             {
-                return null;
+                var user = dBContext.Users.Where(u => u.Username.ToLower() == username.ToLower()).FirstOrDefault();
+                user.LastDatetime = DateTime.Now;
+                dBContext.SaveChanges();
+
+                if (!user.Active)
+                {
+                    return null;
+                }
+
+                var result = dBContext.Questions.Where(x => !x.Reject && x.Active && x.UserId == user.UserId && x.Label && !x.LabelComplete);
+                if (result.Count() > 0)
+                {
+                    return result.FirstOrDefault();
+                }
+                else
+                {
+                    var s = dBContext.Questions.Where(x => !x.Reject && x.Active && !x.Label && !x.LabelComplete).FirstOrDefault();
+                    s.Label = true;
+                    s.LabelDateTime = DateTime.Now;
+                    s.UserId = user.UserId;
+                    dBContext.SaveChanges();
+                    return s;
+                }
             }
-            var result = dBContext.Questions.Where(x => !x.Reject && x.Active && x.UserId == userId && x.Label && !x.LabelComplete);
-            if (result.Any())
-                return result.FirstOrDefault();
-            else
+            catch (Exception)
             {
-                var s= dBContext.Questions.Where(x => !x.Reject && x.Active && !x.Label && !x.LabelComplete).FirstOrDefault();
-                return s;
+                throw;
             }
+            
         }
         public async Task<bool> RejectQuestion(long questionId)
         {
@@ -128,6 +155,7 @@ namespace NJBC.DataLayer.Repository
                 if (question == null)
                     return false;
                 question.Reject = true;
+                question.IsAdv = false;
                 question.Active = false;
                 dBContext.SaveChanges();
                 return true;
@@ -145,6 +173,7 @@ namespace NJBC.DataLayer.Repository
                 if (question == null)
                     return false;
                 question.Reject = false;
+                question.IsAdv = false;
                 question.Active = true;
                 dBContext.SaveChanges();
                 return true;
@@ -173,9 +202,13 @@ namespace NJBC.DataLayer.Repository
                 return false;
             }
         }
-        public async Task<List<Question>> GetQuestionList(int count)
+        public async Task<List<Question>> GetQuestionList(int count, int page)
         {
-            return dBContext.Questions.Where(x => !x.Active && !x.Reject && !x.Label).Take(count).ToList();
+            return dBContext.Questions/*.Where(x =>  !x.Active && !x.Reject && !x.Label)*/.Skip(page * count).Take(count).ToList();
+        }
+        public async Task<int> GetQuestionsCount()
+        {
+            return dBContext.Questions.Count();
         }
         public async Task<bool> AdvQuestion(long questionId)
         {
@@ -185,6 +218,8 @@ namespace NJBC.DataLayer.Repository
                 if (question == null)
                     return false;
                 question.IsAdv = true;
+                question.Active = false;
+                question.Reject = false;
                 dBContext.SaveChanges();
                 return true;
             }
@@ -235,7 +270,7 @@ namespace NJBC.DataLayer.Repository
                 }
             }
         }
-        public async Task<Comment> GetCommentByIdAsync(int id)
+        public async Task<Comment> GetCommentByIdAsync(long id)
         {
             return await dBContext.Comments.FindAsync(id);
         }
@@ -264,6 +299,20 @@ namespace NJBC.DataLayer.Repository
                 return true;
             }
             catch (Exception)
+            {
+                return false;
+            }
+        }
+        public async Task<bool> EditComment(long commentId, string cBodyClean)
+        {
+            try
+            {
+                var cm = dBContext.Comments.Find(commentId);
+                cm.CBodyClean = cBodyClean;
+                dBContext.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
             {
                 return false;
             }
