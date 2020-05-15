@@ -10,6 +10,7 @@ namespace NJBC.Web.App.Label.Models
     {
         public int UserId { get; set; }
         public string ErrMsg { get; set; }
+        public bool Review { get; set; }
         public Question Q { get; set; }
     }
 }

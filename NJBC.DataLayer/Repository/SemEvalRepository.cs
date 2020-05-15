@@ -98,9 +98,13 @@ namespace NJBC.DataLayer.Repository
             if (saveNow)
                 dBContext.SaveChanges();//.ConfigureAwait(false);
         }
-        public async Task<Question> GetQuestionByIdAsync(int id)
+        public async Task<Question> GetQuestionByIdAsync(long id)
         {
             return await dBContext.Questions.FindAsync(id);
+        }
+        public async Task<Question> GetQuestionByQIDAsync(long id)
+        {
+            return dBContext.Questions.Where(q => q.QID == id.ToString()).FirstOrDefault();
         }
         public async Task<List<Question>> GetQuestionByIdAsync(long[] ids)
         {

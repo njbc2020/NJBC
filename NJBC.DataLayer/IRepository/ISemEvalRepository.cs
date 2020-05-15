@@ -15,7 +15,8 @@ namespace NJBC.DataLayer.IRepository
         Task AddQuestion(Topic topic);
         Task AddQuestion(Question input, bool saveNow = true);
         Task AddQuestions(List<Question> input, bool saveNow = true);
-        Task<Question> GetQuestionByIdAsync(int id);
+        Task<Question> GetQuestionByIdAsync(long id);
+        Task<Question> GetQuestionByQIDAsync(long id);
         Task<List<Question>> GetQuestionByIdAsync(long[] ids);
         List<Question> QuestionSearchAsync(string category, string subject);
         Task<Question> GetActiveQuestion(string username);

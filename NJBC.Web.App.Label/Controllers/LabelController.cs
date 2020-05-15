@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NJBC.DataLayer.IRepository;
 using NJBC.DataLayer.Models;
+using NJBC.DataLayer.Models.Semeval2015;
 using NJBC.DataLayer.Repository;
 using NJBC.Models.DTO.Web;
 using NJBC.Web.App.Label.Models;
@@ -19,12 +20,23 @@ namespace NJBC.Web.App.Label.Controllers
             this.SemEvalRepository = SemEvalRepository;
         }
 
-        public IActionResult Label(string id)
+        [Route("Label/Label/{id}/{qid?}")]
+        public IActionResult Label(string id, string qid)
         {
             LabelVM model = new LabelVM();
             try
             {
-                var res = SemEvalRepository.GetActiveQuestion(id).Result;
+                Question res = null;
+                if (!string.IsNullOrEmpty(qid) && long.TryParse(qid, out long _qid))
+                {
+                    res = SemEvalRepository.GetQuestionByQIDAsync(_qid).Result;
+                    model.Review = true;
+                }
+                else
+                {
+                    res = SemEvalRepository.GetActiveQuestion(id).Result;
+                    model.Review = false;
+                }
                 if (res == null)
                     return Redirect("/");
                 model.UserId = res.UserId.Value;

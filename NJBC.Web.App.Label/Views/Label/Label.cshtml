@@ -7,9 +7,18 @@
 @if (string.IsNullOrEmpty(Model.ErrMsg))
 {
     <div class="row">
+
         <div class="col-12">
-            <button class="btn btn-outline-info btn-nextq" type="button">سوال بعدی</button>
+            @if (Model.Review)
+            {
+                <h1 class="text-danger">بازبینی</h1>
+            }
+            else
+            {
+                <button class="btn btn-outline-info btn-nextq" type="button">سوال بعدی</button>
+            }
         </div>
+
         <div class="col-12">
             @if (Model.Q != null)
             {
@@ -101,7 +110,16 @@
         </table>
     </div>
     <div class="row">
-        <button class="btn btn-outline-info btn-nextq" type="button">سوال بعدی</button>
+        <div class="col-12">
+            @if (Model.Review)
+            {
+                <h1 class="text-danger">بازبینی</h1>
+            }
+            else
+            {
+                <button class="btn btn-outline-info btn-nextq" type="button">سوال بعدی</button>
+            }
+        </div>
     </div>
     <script>
         $(document).ready(function () {
