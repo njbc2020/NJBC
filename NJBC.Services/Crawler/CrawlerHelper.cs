@@ -7,8 +7,6 @@ using System.Linq;
 using Newtonsoft.Json;
 using System.IO;
 using System.Globalization;
-using NJBC.Services.Iservices;
-using NJBC.Services.services;
 using NJBC.DataLayer.Repository;
 using NJBC.DataLayer.IRepository;
 using NJBC.DataLayer.Models;

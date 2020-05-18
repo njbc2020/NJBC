@@ -28,12 +28,34 @@ namespace NJBC.DataLayer.Repository
         #region Auth
         public async Task<bool> Auth(string username, string password)
         {
-            var res= dBContext.Users.Any(u => u.Username.ToLower() == username.ToLower() && u.Password == password && u.Active);
+            var res = dBContext.Users.Any(u => u.Username.ToLower() == username.ToLower() && u.Password == password && u.Active);
             return res;
         }
         #endregion
 
         #region SemEval 2015 - Question
+        public async Task<DatailVM> GetDetailData()
+        {
+            DatailVM response = new DatailVM();
+
+            var query = (from q in dBContext.Questions
+                              join c in dBContext.Comments on q.QuestionId equals c.QuestionId
+                              where c.CGOLD != null &&
+                                    q.Active &&
+                                    (q.Label || q.LabelComplete)
+                              select c
+                             ).ToList();
+            response.Total = query.Count();
+            response.Good = query.Where(x => x.CGOLD == "Good").Count();
+            response.Potential = query.Where(x => x.CGOLD == "Potential").Count();
+            response.Bad = query.Where(x => x.CGOLD == "Bad").Count();
+
+            response.Active = dBContext.Questions.Where(x => x.Active).Count();
+            response.Reject = dBContext.Questions.Where(x => x.Reject).Count();
+            response.Adv = dBContext.Questions.Where(x => x.IsAdv).Count();
+
+            return response;
+        }
         public async Task AddQuestion(Topic topic)
         {
             try
@@ -149,8 +171,9 @@ namespace NJBC.DataLayer.Repository
             {
                 throw;
             }
-            
+
         }
+
         public async Task<bool> RejectQuestion(long questionId)
         {
             try
@@ -169,6 +192,7 @@ namespace NJBC.DataLayer.Repository
                 return false;
             }
         }
+
         public async Task<bool> ActiveQuestion(long questionId)
         {
             try

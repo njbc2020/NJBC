@@ -6,6 +6,7 @@ using NJBC.DataLayer.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using NJBC.DataLayer.Models.Semeval2015;
 using NJBC.Web.App.Label.Models;
+using NJBC.Models.DTO.Web;
 
 namespace NJBC.Web.App.Label.Controllers
 {
@@ -15,6 +16,13 @@ namespace NJBC.Web.App.Label.Controllers
         public AdminController(ISemEvalRepository SemEvalRepository)
         {
             this.SemEvalRepository = SemEvalRepository;
+        }
+
+        [HttpGet]
+        public IActionResult Detail()
+        {
+            DatailVM model = SemEvalRepository.GetDetailData().Result;
+            return View(model);
         }
 
         [HttpGet]

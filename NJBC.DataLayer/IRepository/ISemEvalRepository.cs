@@ -12,6 +12,7 @@ namespace NJBC.DataLayer.IRepository
     public interface ISemEvalRepository
     {
         #region SemEval 2015
+        Task<DatailVM> GetDetailData();
         Task AddQuestion(Topic topic);
         Task AddQuestion(Question input, bool saveNow = true);
         Task AddQuestions(List<Question> input, bool saveNow = true);

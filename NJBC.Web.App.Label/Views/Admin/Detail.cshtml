@@ -1,0 +1,55 @@
+﻿@model NJBC.Models.DTO.Web.DatailVM
+
+@{
+    ViewData["Title"] = "Detail";
+}
+
+<h1>Detail</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Total)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Total)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Active)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Active)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Reject)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Reject)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Adv)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Adv)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Good)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Good)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Bad)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Bad)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Potential)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Potential)
+        </dd>
+    </dl>
+</div>
