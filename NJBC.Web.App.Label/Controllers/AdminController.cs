@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using NJBC.DataLayer.Models.Semeval2015;
 using NJBC.Web.App.Label.Models;
 using NJBC.Models.DTO.Web;
+using NJBC.Common;
 
 namespace NJBC.Web.App.Label.Controllers
 {
@@ -100,6 +101,32 @@ namespace NJBC.Web.App.Label.Controllers
 
                 return (DateTime.Now.Day * DateTime.Now.Month * hour + hour).ToString();
             }
+        }
+
+
+        [HttpGet]
+        public IActionResult QuestionEdit(long id)
+        {
+            QuestionEditParam model = new QuestionEditParam();
+            var _model = SemEvalRepository.GetQuestionByIdAsync(id).Result;
+            model.QBody = _model.QBody;
+            model.QSubject = _model.QSubject;
+            model.QuestionId = _model.QuestionId;
+            using (TextHelper textHelper = new TextHelper())
+            {
+                model.QSubjectClean = textHelper.CleanReview(_model.QSubject);
+                model.QBodyClean = textHelper.CleanReview(_model.QBody);
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult QuestionEdit(QuestionEditParam param)
+        {
+            var res = SemEvalRepository.EditQuestion(param).Result;
+            if (res)
+                return Redirect("/");
+            return View();
         }
     }
 }

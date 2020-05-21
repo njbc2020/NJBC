@@ -1,0 +1,59 @@
+﻿@model NJBC.Models.DTO.Web.QuestionEditParam
+
+@{
+    ViewData["Title"] = "QuestionEdit " + Model.QuestionId;
+}
+
+<h1>QuestionEdit</h1>
+
+<h4>Question</h4>
+<hr />
+<div class="row">
+    <div class="col-md-10">
+        <form asp-action="QuestionEdit">
+            <input type="hidden" asp-for="QuestionId" />
+
+            <div class="form-group">
+                <label asp-for="QSubject" class="control-label"></label>
+                <textarea asp-for="QSubject" class="form-control" rows="5" cols="40"></textarea>
+                <span asp-validation-for="QSubject" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="QBody" class="control-label"></label>
+                <textarea asp-for="QBody" class="form-control" rows="10" cols="40"></textarea>
+                <span asp-validation-for="QBody" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<hr />
+<br />
+<br />
+<br />
+<br />
+<hr />
+<div class="row">
+    <div class="col-md-10">
+        <div>
+            <div class="form-group">
+                <label asp-for="QSubjectClean" class="control-label"></label>
+                <textarea asp-for="QSubjectClean" class="form-control" rows="5" cols="40"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="QBodyClean" class="control-label"></label>
+                <textarea asp-for="QBodyClean" class="form-control" rows="10" cols="40"></textarea>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

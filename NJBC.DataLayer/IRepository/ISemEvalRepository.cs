@@ -27,6 +27,7 @@ namespace NJBC.DataLayer.IRepository
         Task<bool> SetLabelCompelete(CompleteQuestionParam questionId);
         Task<List<Question>> GetQuestionList(int count, int page);
         Task<int> GetQuestionsCount();
+        Task<bool> EditQuestion(QuestionEditParam param);
 
         Task AddComment(Comment input, bool saveNow = true);
         Task AddComments(List<Comment> input, bool saveNow = true);

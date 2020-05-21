@@ -39,16 +39,17 @@ namespace NJBC.DataLayer.Repository
             DatailVM response = new DatailVM();
 
             var query = (from q in dBContext.Questions
-                              join c in dBContext.Comments on q.QuestionId equals c.QuestionId
-                              where c.CGOLD != null &&
-                                    q.Active &&
-                                    (q.Label || q.LabelComplete)
-                              select c
+                         join c in dBContext.Comments on q.QuestionId equals c.QuestionId
+                         where c.CGOLD != null &&
+                               q.Active &&
+                               (q.Label || q.LabelComplete)
+                         select c
                              ).ToList();
             response.Total = query.Count();
             response.Good = query.Where(x => x.CGOLD == "Good").Count();
             response.Potential = query.Where(x => x.CGOLD == "Potential").Count();
             response.Bad = query.Where(x => x.CGOLD == "Bad").Count();
+            response.NullCount = query.Where(x => x.CGOLD == "" || string.IsNullOrEmpty(x.CGOLD)).Count();
 
             response.Active = dBContext.Questions.Where(x => x.Active).Count();
             response.Reject = dBContext.Questions.Where(x => x.Reject).Count();
@@ -255,6 +256,15 @@ namespace NJBC.DataLayer.Repository
             {
                 return false;
             }
+        }
+
+        public async Task<bool> EditQuestion(QuestionEditParam param)
+        {
+            var question = dBContext.Questions.Find(param.QuestionId);
+            question.QBody = param.QBody;
+            question.QSubject = param.QSubject;
+            dBContext.SaveChanges();
+            return true;
         }
         #endregion
 

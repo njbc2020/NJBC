@@ -13,5 +13,6 @@ namespace NJBC.Models.DTO.Web
         public int Good { get; set; }
         public int Bad { get; set; }
         public int Potential { get; set; }
+        public int NullCount { get; set; }
     }
 }
