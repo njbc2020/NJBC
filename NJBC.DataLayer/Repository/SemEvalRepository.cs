@@ -34,6 +34,18 @@ namespace NJBC.DataLayer.Repository
         #endregion
 
         #region SemEval 2015 - Question
+        public async Task<List<Question>> GetLabeledQuestions()
+        {
+            var q1 = (from q in dBContext.Questions
+                      join c in dBContext.Comments on q.QuestionId equals c.QuestionId
+                      where c.CGOLD != null &&
+                            q.Active &&
+                            (q.Label || q.LabelComplete) &&
+                            q.UserId == 2
+                      select q.QuestionId).ToList().Distinct();
+            var q2 = dBContext.Questions.Where(s => q1.Contains(s.QuestionId)).ToList();
+            return q2;
+        }
         public async Task<DatailVM> GetDetailData()
         {
             DatailVM response = new DatailVM();
@@ -42,7 +54,8 @@ namespace NJBC.DataLayer.Repository
                          join c in dBContext.Comments on q.QuestionId equals c.QuestionId
                          where c.CGOLD != null &&
                                q.Active &&
-                               (q.Label || q.LabelComplete)
+                               (q.Label || q.LabelComplete) &&
+                               q.UserId == 2
                          select c
                              ).ToList();
             response.Total = query.Count();

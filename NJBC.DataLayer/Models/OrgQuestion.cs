@@ -15,10 +15,10 @@ namespace NJBC.DataLayer.Models
         public string OrgqIdName { get; set; }
         public string OrgQsubject { get; set; }
         public string OrgQbody { get; set; }
-        [ForeignKey("User")]
-        public int? UserId { get; set; }
+        //[ForeignKey("User")]
+        //public int? UserId { get; set; }
 
-        public virtual User User { get; set; }
+        //public virtual User User { get; set; }
         public virtual ICollection<RelQuestion> RelQuestion { get; set; }
     }
 }

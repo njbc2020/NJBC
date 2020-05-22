@@ -12,7 +12,7 @@ namespace NJBC.DataLayer.Models
     {
         public User()
         {
-            OrgQuestions = new HashSet<OrgQuestion>();
+            //OrgQuestions = new HashSet<OrgQuestion>();
             Questions = new HashSet<Question>();
         }
 
@@ -23,7 +23,7 @@ namespace NJBC.DataLayer.Models
         public bool Active { get; set; }
         public DateTime LastDatetime { get; set; }
 
-        public virtual ICollection<OrgQuestion> OrgQuestions { get; set; }
+        //public virtual ICollection<OrgQuestion> OrgQuestions { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using System.Text;
 
 namespace NJBC.DataLayer.Models.Semeval2015
 {
+    [Serializable]
     public class Comment
     {
         [Key]
@@ -19,6 +20,7 @@ namespace NJBC.DataLayer.Models.Semeval2015
         public string CBody { get; set; }
         public string CBodyClean { get; set; }
         public string CUsername { get; set; }
+        public DateTime? CDate { get; set; }
         public DateTime? LabelDate { get; set; }
 
         //[ForeignKey("ReplayComment")]

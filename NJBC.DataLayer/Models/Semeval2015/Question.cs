@@ -6,6 +6,7 @@ using System.Text;
 
 namespace NJBC.DataLayer.Models.Semeval2015
 {
+    [Serializable]
     public class Question
     {
         public Question()

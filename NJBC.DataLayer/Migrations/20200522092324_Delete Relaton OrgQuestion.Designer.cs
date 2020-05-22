@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NJBC.DataLayer.Models;
 
 namespace NJBC.DataLayer.Migrations
 {
     [DbContext(typeof(NJBC_DBContext))]
-    partial class NJBC_DBContextModelSnapshot : ModelSnapshot
+    [Migration("20200522092324_Delete Relaton OrgQuestion")]
+    partial class DeleteRelatonOrgQuestion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -171,9 +173,6 @@ namespace NJBC.DataLayer.Migrations
 
                     b.Property<string>("CBodyClean")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("CGOLD")
                         .HasColumnType("nvarchar(max)");

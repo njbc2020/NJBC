@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.Threading;
 using NJBC.DataLayer.Models.Semeval2015;
 using NJBC.Common;
+using System.Globalization;
 
 namespace NJBC.App.Crawler
 {
@@ -143,8 +144,15 @@ namespace NJBC.App.Crawler
                                             CGOLD_YN = "",
                                             CSubject = "",
                                             ReplayCommentId = message.ReplayId,
-                                            QuestionId = q.QuestionId,
+                                            QuestionId = q.QuestionId
                                         };
+                                        int[] _persianDate = message.Date.Split('/').Select(x => Convert.ToInt32(x)).ToArray();
+                                        if (_persianDate.Length == 3)
+                                        {
+                                            PersianCalendar pc = new PersianCalendar();
+                                            DateTime dt = new DateTime(_persianDate[0], _persianDate[1], _persianDate[2], 0, 0, 0, pc);
+                                            cm.CDate = dt;
+                                        }
                                         if (!textHelper.RemoveSingleEmoji(cm.CBodyClean))
                                         {
                                             _comments.Add(cm);
