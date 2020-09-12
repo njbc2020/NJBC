@@ -293,10 +293,19 @@ namespace NJBC.DataLayer.Repository
         {
             if (true)
             {
-                dBContext.Comments.AddRange(input);
+                int sv = 18;
+                try
+                {
+                    dBContext.Comments.AddRange(input);
 
-                if (saveNow)
-                    dBContext.SaveChanges();
+                    if (saveNow)
+                        sv = dBContext.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    string s = ex.Message;
+                }
+               
             }
             if (false)
             {

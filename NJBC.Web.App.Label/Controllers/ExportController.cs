@@ -36,35 +36,42 @@ namespace NJBC.Web.App.Label.Controllers
                 StringBuilder sb = new StringBuilder(xmlHeader);
                 foreach (var q in data)
                 {
-                    sb.AppendFormat("\t<Thread THREAD_SEQUENCE=\"Q{0}_R16\">\n", q.QID);
+                    sb.AppendLine($"\t<Thread THREAD_SEQUENCE=\"Q{q.QID}_R16\">");
                     sb.AppendFormat("\t\t<RelQuestion RELQ_ID=\"Q{0}_R{1}\" RELQ_CATEGORY=\"{2}\" RELQ_DATE=\"{3}\" RELQ_USERID=\"U{4}\" RELQ_USERNAME=\"{5}\">\n", q.QID, 16, "Namzadi", q.QDATE.ToString("yyyy-MM-dd HH:mm:ss"), q.QUSERID, q.QUsername);
                     if (j == 0)
                     {
-                        sb.AppendFormat("\t\t\t<RelQSubject>{0}</RelQSubject>\n", q.QSubject);
-                        sb.AppendFormat("\t\t\t<RelQBody>{0}</RelQBody>\n", q.QBody);
+                        sb.AppendLine($"\t\t\t<RelQSubject>{q.QSubject}</RelQSubject>");
+                        sb.AppendLine($"\t\t\t<RelQBody>{q.QBody}</RelQBody>");
                     }
                     if (j == 1)
                     {
-                        sb.AppendFormat("\t\t\t<RelQSubject>{0}</RelQSubject>\n", questions.FirstOrDefault(x => x.QuestionId == q.QuestionId).QSubject);
-                        sb.AppendFormat("\t\t\t<RelQBody>{0}</RelQBody>\n", questions.FirstOrDefault(x => x.QuestionId == q.QuestionId).QBody);
+                        try
+                        {
+                            sb.AppendLine($"\t\t\t<RelQSubject>{questions.FirstOrDefault(x => x.QuestionId == q.QuestionId).QSubject}</RelQSubject>");
+                            sb.AppendLine($"\t\t\t<RelQBody>{questions.FirstOrDefault(x => x.QuestionId == q.QuestionId).QBody}</RelQBody>");
+                        }
+                        catch (Exception)
+                        {
+                            sb.AppendLine($"\t\t\t<RelQSubject>{ q.QSubject}</RelQSubject>");
+                            sb.AppendLine($"\t\t\t<RelQBody>{q.QBody}</RelQBody>");
+                        }
                     }
-                    sb.Append("\t\t</RelQuestion>\n");
+                    sb.Append("\t\t</RelQuestion>");
                     for (int i = 0; i < q.Comments.Count; i++)
                     {
                         var c = q.Comments.ToList();
-                        sb.AppendFormat("\t\t<RelComment RELC_ID=\"Q{0}_R{1}_C{2}\" RELC_DATE=\"{3}\" RELC_USERID=\"U{4}\" RELC_USERNAME=\"{5}\" RELC_RELEVANCE2RELQ=\"{6}\">\n",
-                            q.QuestionId, 16, i + 1, commentDate[c[i].CommentId].ToString("yyyy-MM-dd HH:mm:ss"), c[i].CUSERID, c[i].CUsername, c[i].CGOLD);
+                        sb.AppendLine($"\t\t<RelComment RELC_ID=\"Q{q.QuestionId}_R{16}_C{i+1}\" RELC_DATE=\"{commentDate[c[i].CommentId].ToString("yyyy-MM-dd HH:mm:ss")}\" RELC_USERID=\"U{c[i].CUSERID}\" RELC_USERNAME=\"{c[i].CUsername}\" RELC_RELEVANCE2RELQ=\"{c[i].CGOLD}\">");
                         if (j == 0)
-                            sb.AppendFormat("\t\t\t<RelCText>{0}</RelCText>\n", c[i].CBodyClean);
+                            sb.AppendLine($"\t\t\t<RelCText>{c[i].CBodyClean}</RelCText>");
                         if (j == 1)
-                            sb.AppendFormat("\t\t\t<RelCText>{0}</RelCText>\n", _comments.FirstOrDefault(x => x.CommentId == c[i].CommentId).CBodyClean);
-                        sb.Append("\t\t</RelComment>\n");
+                            sb.AppendLine($"\t\t\t<RelCText>{_comments.FirstOrDefault(x => x.CommentId == c[i].CommentId).CBodyClean}</RelCText>");
+                        sb.AppendLine("\t\t</RelComment>");
                     }
-                    sb.Append("\t</Thread>\n");
+                    sb.AppendLine("\t</Thread>");
                 }
                 sb.Append("</xml>");
 
-                System.IO.File.WriteAllText($@"d:\x-{j}.xml", sb.ToString());
+                System.IO.File.WriteAllText($@"d:\x-{DateTime.Now.ToString("yyyy_MM_dd")}-{j}.xml", sb.ToString());
             }
             return Ok();
         }
@@ -85,8 +92,8 @@ namespace NJBC.Web.App.Label.Controllers
         #region 03 Import Json To Database
         public static void ImportJsonToDB()
         {
-            int[] forums = new int[] { 115, 116 };
-            int[] blockTopic = new int[] { 3298910, 1503527, 1662425, 3666349 };
+            int[] forums = new int[] { 115, 116, 21 };
+            int[] blockTopic = new int[] { 3298910, 1503527, 1662425, 3666349, 4432469, 2225778, 1449197 };
 
             List<string> filePaths = new List<string>();
             foreach (var forum in forums)
@@ -125,7 +132,7 @@ namespace NJBC.Web.App.Label.Controllers
                                     usersDic.Add(topic.NickName, userid);
                                     usersIdDic.Add(userid, topic.NickName);
                                 }
-
+                                
                                 Question q = new Question()
                                 {
                                     QuestionId = qc++,

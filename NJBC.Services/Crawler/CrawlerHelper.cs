@@ -22,7 +22,7 @@ namespace NJBC.Services.Crawler
         public void StartCrawling()
         {
             List<TopicLink> links = new List<TopicLink>();
-            links = GetTopics(new List<int> { 115 }); // گرفتن لیست تاپیک ها
+            links = GetTopics(new List<int> { 21 }); // گرفتن لیست تاپیک ها
 
             Console.WriteLine("Topic Number: " + links.Count);
             foreach (var link in links)
@@ -89,7 +89,7 @@ namespace NJBC.Services.Crawler
                             "//div[@class='col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-9 p-x-0  topic-post__body p-t-0 direction-rtl nini-medium']" +
                             "//div[@class='col-xs-12 pull-xs-right p-x-0']" +
                             "//div[@class='col-xs-6 created-post text-xs-left p-x-1 m-t-0']" +
-                            "//div[@class='d-inline-block']"+
+                            "//div[@class='d-inline-block']" +
                             "//span[@class='date']"
                            );
                         var createTime = doc.GetElementbyId("topic").SelectSingleNode(
@@ -104,14 +104,29 @@ namespace NJBC.Services.Crawler
                             topic.CreateDate = createDate.InnerText;
                             try
                             {
+                                bool isPersian = true;
+                                if (topic.CreateDate == "دیروز")
+                                {
+                                    topic.CreateDate = DateTime.Now.AddDays(-1).ToString("yyyy/MM/dd");
+                                    isPersian = false;
+                                }
+                                if (topic.CreateDate == "امروز")
+                                {
+                                    topic.CreateDate = DateTime.Now.ToString("yyyy/MM/dd");
+                                    isPersian = false;
+                                }
                                 if (!string.IsNullOrEmpty(topic.CreateDate) && topic.CreateDate.Contains("/"))
                                 {
                                     int[] _persianDate = topic.CreateDate.Split('/').Select(x => Convert.ToInt32(x)).ToArray();
                                     int[] _persianTime = createTime.InnerText.Trim().Split(':').Select(x => Convert.ToInt32(x)).ToArray();
-                                    if (_persianDate.Length == 3 && _persianTime.Length ==2)
+                                    if (_persianDate.Length == 3 && _persianTime.Length == 2)
                                     {
                                         PersianCalendar pc = new PersianCalendar();
-                                        DateTime dt = new DateTime(_persianDate[0], _persianDate[1], _persianDate[2], _persianTime[0], _persianTime[1], 0, pc);
+                                        DateTime dt = new DateTime();
+                                        if (isPersian)
+                                            dt = new DateTime(_persianDate[0], _persianDate[1], _persianDate[2], _persianTime[0], _persianTime[1], 0, pc);
+                                        else
+                                            dt = new DateTime(_persianDate[0], _persianDate[1], _persianDate[2], _persianTime[0], _persianTime[1], 0);
                                         topic.CreateDatetime = dt;
                                     }
                                 }
@@ -156,7 +171,17 @@ namespace NJBC.Services.Crawler
                         Console.Write($"Conut: {maxId}   \t");
                         for (int i = 1; i < maxId + 1; i++)
                         {
-                            msgs.AddRange(getAnswersFromTopicId(link.TopicId, i));
+                            try
+                            {
+                                var _msgs = getAnswersFromTopicId(link.TopicId, i);
+                                if (_msgs.Count() > 0)
+                                {
+                                    msgs.AddRange(_msgs);
+                                }
+                            }
+                            catch (Exception)
+                            {
+                            }
                         }
                     }
 
@@ -165,7 +190,7 @@ namespace NJBC.Services.Crawler
                     topic.Question = question;
                     topic.Description = description;
 
-                    
+
                     var jsonFile = JsonConvert.SerializeObject(topic);
                     MakeJson(jsonFile, link.ForumId, topic.TopicId);
                     // به دلیل وجود مقادیر تمیز نشده در برخی از فیلدها، امکان دخیره سازی با فرمت فوق ناممکن است
@@ -271,7 +296,7 @@ namespace NJBC.Services.Crawler
             //        SemEval.AddQuestion(topic);
             //        //if (searchRes == null || searchRes.Count()==0)
             //        //{
-                        
+
             //        //}
             //    }
             //}
@@ -466,98 +491,118 @@ namespace NJBC.Services.Crawler
         public List<Message> getAnswersFromTopicId(int topicId, int id)
         {
             List<Message> msgs = new List<Message>();
-            // ساختن لینک و بدست آوردن مقدار صفحه
-            var url = "https://www.ninisite.com/discussion/topic/" + topicId + "/a?page=" + id;
-            var web = new HtmlWeb();
-            var doc = web.Load(url);
-
-
-            var data = doc.GetElementbyId("posts").Descendants("article");
-
-            foreach (var item in data)
+            try
             {
-                Message msg1 = new Message();
-                string _article = item.InnerHtml
-                    .Replace(@"class=""post-message", @"id=""msgDiv"" class=""post-message")
-                    .Replace(@"class=""reply-message""", @"id=""reply-message""")
-                    .Replace(@"class=""col-xs-12 p-x-0 postfooter""", @"id=""postfooter""")
-                    .Replace(@"class=""date""", @"id=""date""")
-                    .Replace(@"class=""like-count fancy__text""", @"id=""likeCount""")
-                    .Replace(@"class=""col-xs-9 col-md-12 text-md-center text-xs-right nickname""", @"id=""nickname""")
-                    .Replace(@"class=""text-xs-right pull-sm-right pull-md-none text-md-center post-count""", @"id=""postCount""")
-                    .Replace(@"تعداد پست:", " ");
-                var doc1 = new HtmlDocument();
-                doc1.LoadHtml(_article);
-                msg1.MessageId = int.Parse(item.Attributes["id"].Value.Replace("post-", ""));
-                var parags = doc1.GetElementbyId("msgDiv").SelectNodes("//p");
-                var postDate = doc1.GetElementbyId("date").InnerHtml.Replace("\r\n", "").Replace("  ", " ").Trim();
-                if (!string.IsNullOrEmpty(postDate))
-                {
-                    msg1.Date = postDate;
-                }
-                var postCount = doc1.GetElementbyId("postCount")
-                                        .InnerHtml.Replace("\r\n", "")
-                                        .Replace("<span>", "")
-                                        .Replace("</span>", "")
-                                        .Replace("  ", " ")
-                                        .Trim();
-                if (!string.IsNullOrEmpty(postCount) && int.TryParse(postCount, out int intNumber))
-                {
-                    msg1.PostCount = intNumber;
-                }
-                var isNickName = doc1.GetElementbyId("nickname");
-                string nickName = string.Empty;
-                if (isNickName != null)
-                {
-                    nickName = doc1.GetElementbyId("nickname").InnerHtml.Replace("\r\n", "").Replace("  ", " ").Trim();
-                }
 
-                if (!string.IsNullOrEmpty(nickName))
-                {
-                    msg1.Name = nickName;
-                }
-                var likeCount = doc1.GetElementbyId("likeCount").InnerHtml.Replace("\r\n", "")
-                                                .Replace("نفر لایک کرده اند ...", "")
-                                                .Replace("<span>", "")
-                                                .Replace("</span>", "")
-                                                .Replace("  ", " ").Trim();
-                if (!string.IsNullOrEmpty(likeCount) && int.TryParse(likeCount, out int intNumberLike))
-                {
-                    msg1.Like = intNumberLike;
-                }
-                string _txt = "";
-                if (parags != null)
-                {
-                    _txt = string.Join(". ", doc1.GetElementbyId("msgDiv").SelectNodes("//p").Select(x => x.InnerText));
+                // ساختن لینک و بدست آوردن مقدار صفحه
+                var url = "https://www.ninisite.com/discussion/topic/" + topicId + "/a?page=" + id;
+                var web = new HtmlWeb();
+                var doc = web.Load(url);
 
-                }
-                else
+
+                var data = doc.GetElementbyId("posts").Descendants("article");
+
+                foreach (var item in data)
                 {
-                    _txt = doc1.GetElementbyId("msgDiv").InnerText.ToString();
-                }
-                msg1.Text = _txt;
-                _txt = _txt.Replace(@"	", ". ").Replace("&nbsp;", " ").Replace("  ", " ")
-                    .Replace("  ", " ").Replace("\n\r", ". ").Replace("\r\n", ". ").Replace(". . ", ". ").Trim();
-                if (string.IsNullOrEmpty(_txt))
-                {
-                    continue;
-                }
-                if (_txt.Substring(0, 1) == ".")
-                {
-                    _txt = _txt.Substring(1, _txt.Length - 1);
-                }
-                _txt = _txt.Trim();
-                msg1.TextClean = _txt;
-                if (doc1.GetElementbyId("reply-message") != null)
-                {
-                    if (int.TryParse(doc1.GetElementbyId("reply-message").Attributes["data-id"].Value, out int _replayId))
+                    Message msg1 = new Message();
+
+                    string _article = item.InnerHtml
+                        .Replace(@"class=""post-message", @"id=""msgDiv"" class=""post-message")
+                        .Replace(@"class=""reply-message""", @"id=""reply-message""")
+                        .Replace(@"class=""col-xs-12 p-x-0 postfooter""", @"id=""postfooter""")
+                        .Replace(@"class=""date""", @"id=""date""")
+                        .Replace(@"class=""time""", @"id=""time""")
+                        .Replace(@"class=""like-count fancy__text""", @"id=""likeCount""")
+                        .Replace(@"class=""col-xs-9 col-md-12 text-md-center text-xs-right nickname""", @"id=""nickname""")
+                        .Replace(@"class=""text-xs-right pull-sm-right pull-md-none text-md-center post-count""", @"id=""postCount""")
+                        .Replace(@"تعداد پست:", " ");
+                    var doc1 = new HtmlDocument();
+                    doc1.LoadHtml(_article);
+                    msg1.MessageId = int.Parse(item.Attributes["id"].Value.Replace("post-", ""));
+                    var parags = doc1.GetElementbyId("msgDiv").SelectNodes("//p");
+                    var postDate = doc1.GetElementbyId("date").InnerHtml.Replace("\r\n", "").Replace("  ", " ").Trim();
+                    if (!string.IsNullOrEmpty(postDate))
                     {
-                        msg1.ReplayId = _replayId;
+                        msg1.Date = postDate;
                     }
+                    var postTime = doc1.GetElementbyId("time").InnerHtml.Replace("\r\n", "").Replace("  ", " ").Trim();
+                    if (!string.IsNullOrEmpty(postTime))
+                    {
+                        msg1.Time = postTime;
+                    }
+                    var postCount = doc1.GetElementbyId("postCount")
+                                            .InnerHtml.Replace("\r\n", "")
+                                            .Replace("<span>", "")
+                                            .Replace("</span>", "")
+                                            .Replace("  ", " ")
+                                            .Trim();
+                    if (!string.IsNullOrEmpty(postCount) && int.TryParse(postCount, out int intNumber))
+                    {
+                        msg1.PostCount = intNumber;
+                    }
+                    var isNickName = doc1.GetElementbyId("nickname");
+                    string nickName = string.Empty;
+                    if (isNickName != null)
+                    {
+                        nickName = doc1.GetElementbyId("nickname").InnerHtml.Replace("\r\n", "").Replace("  ", " ").Trim();
+                    }
+
+                    if (!string.IsNullOrEmpty(nickName))
+                    {
+                        msg1.Name = nickName;
+                    }
+                    var likeCount = doc1.GetElementbyId("likeCount").InnerHtml.Replace("\r\n", "")
+                                                    .Replace("نفر لایک کرده اند ...", "")
+                                                    .Replace("<span>", "")
+                                                    .Replace("</span>", "")
+                                                    .Replace("  ", " ").Trim();
+                    if (!string.IsNullOrEmpty(likeCount) && int.TryParse(likeCount, out int intNumberLike))
+                    {
+                        msg1.Like = intNumberLike;
+                    }
+                    string _txt = "";
+                    if (parags != null)
+                    {
+                        _txt = string.Join(". ", doc1.GetElementbyId("msgDiv").SelectNodes("//p").Select(x => x.InnerText));
+
+                    }
+                    else
+                    {
+                        _txt = doc1.GetElementbyId("msgDiv").InnerText.ToString();
+                    }
+                    msg1.Text = _txt;
+                    _txt = _txt.Replace(@"	", ". ").Replace("&nbsp;", " ").Replace("  ", " ")
+                        .Replace("  ", " ").Replace("\n\r", ". ").Replace("\r\n", ". ").Replace(". . ", ". ").Trim();
+                    if (string.IsNullOrEmpty(_txt))
+                    {
+                        continue;
+                    }
+                    if (_txt.Substring(0, 1) == ".")
+                    {
+                        _txt = _txt.Substring(1, _txt.Length - 1);
+                    }
+                    _txt = _txt.Trim();
+                    msg1.TextClean = _txt;
+                    if (doc1.GetElementbyId("reply-message") != null)
+                    {
+                        if (int.TryParse(doc1.GetElementbyId("reply-message").Attributes["data-id"].Value, out int _replayId))
+                        {
+                            msg1.ReplayId = _replayId;
+                        }
+                    }
+                    msgs.Add(msg1);
                 }
-                msgs.Add(msg1);
+                Console.Write("\r{0}   ", id);
+
             }
-            Console.Write("\r{0}   ", id);
+            catch (Exception ex)
+            {
+                string text = ex.Message;
+                // WriteAllText creates a file, writes the specified string to the file,
+                // and then closes the file.    You do NOT need to call Flush() or Close().
+                string path = @"C:\Nini\Forum\" + topicId + "\\A_Error_" + id + ".txt";
+                System.IO.File.WriteAllText(path, text);
+            }
             return msgs;
         }
         #endregion

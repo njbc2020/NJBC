@@ -1404,7 +1404,8 @@ namespace NJBC.Common
 
             string _txt = NumberEN(text);
             _txt = _txt
-                            .Replace("ي", "ی").Replace("ك", "ک").Replace(" ... ", " … ").Replace("باسلام", "با سلام ").Replace("سلام.", "سلام. ")
+                            .Replace("\""," ")
+                            .Replace("ي", "ی").Replace("ك", "ک").Replace(" ... ", " … ").Replace("... ", " … ").Replace("باسلام", "با سلام ").Replace("سلام.", "سلام. ")
                             .Replace("ااااااا", "ا").Replace("اااااا", "ا").Replace("ااااا", "ا").Replace("اااا", "ا").Replace("ااا", "ا")
                             .Replace("ااااااا", "ا").Replace("اااااا", "ا").Replace("ااااا", "ا").Replace("اااا", "ا").Replace("ااا", "ا")
                             .Replace("ررررررر", "ر").Replace("رررررر", "ر").Replace("ررررر", "ر").Replace("رررر", "ر")
@@ -1421,6 +1422,7 @@ namespace NJBC.Common
                             .Replace("افتاده.", "افتاده. ").Replace("افتاده؟", "افتاده؟ ").Replace("افتاد.", "افتاد. ").Replace("افتاد؟", "افتاد؟ ")
                             .Replace("خورد.", "خورد. ").Replace("خورد؟", "خورد؟ ")
                             .Replace("نکنید.", "نکنید. ").Replace("بوسید.", "بوسید. ").Replace("نویس.", "نویس. ").Replace("دارم.","دارم. ")
+                            .Replace("کنیم؟", "کنیم؟ ").Replace("کنیم.", "کنیم. ")
                             .Replace("بارداری.", "بارداری. ").Replace("پریودم.", "پریودم. ").Replace("دوره ام.", "دوره ام. ")
                             .Replace("پرید.","پرید. ").Replace("پریدم.", "پریدم. ").Replace("برید.", "برید. ").Replace("بریدم.", "بریدم. ").Replace("دورم.","دورم. ")
                             .Replace("باشه.", "باشه. ").Replace("باشه؟", "باشه؟ ")
