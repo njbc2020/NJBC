@@ -270,6 +270,10 @@ namespace NJBC.DataLayer.Repository
                 return false;
             }
         }
+        public async Task<long> GetLastQuestionID()
+        {
+            return dBContext.Questions.Max(x => x.QuestionId);
+        }
 
         public async Task<bool> EditQuestion(QuestionEditParam param)
         {
@@ -278,6 +282,48 @@ namespace NJBC.DataLayer.Repository
             question.QSubject = param.QSubject;
             dBContext.SaveChanges();
             return true;
+        }
+        struct User
+        {
+            public long ID { get; set; }
+            public string UserName { get; set; }
+        }
+        public async Task<Dictionary<string, long>> GetUsersAsync()
+        {
+            int k = 0;
+            List<User> s1 = dBContext.Questions.Select(x => new User { ID = x.QUSERID, UserName = x.QUsername }).Distinct().ToList();
+            List<User> s2 = dBContext.Comments.Select(x => new User { ID = x.CUSERID, UserName = x.CUsername }).Distinct().ToList();
+            s2.AddRange(s1);
+            var s3 = s2.Distinct().OrderBy(x => x.ID).ToList();
+            Dictionary<string, long> user = new Dictionary<string, long>();
+            for (int i = 0; i < s3.Count; i++)
+            {
+                try
+                {
+                    if (!user.ContainsKey(s3[i].UserName) && !user.ContainsValue(s3[i].ID))
+                    {
+                        user.Add(s3[i].UserName, s3[i].ID);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    k++;
+                    var name1 = user[s3[i].UserName];
+                    string error = s3[i].ID + " - " + s3[i].UserName;
+                    //Console.WriteLine(error);
+                }
+            }
+
+            //Dictionary<long, string> user = s3.ToDictionary(x => x.ID, x => x.UserName);
+            Console.WriteLine("User: " + user.Count());
+            Console.WriteLine("Error: " + k);
+            return user;
+            //}
+            //catch (Exception ex)
+            //{
+            //    string zereshk = ex.Message;
+            //    throw;
+            //}
         }
         #endregion
 
@@ -305,7 +351,7 @@ namespace NJBC.DataLayer.Repository
                 {
                     string s = ex.Message;
                 }
-               
+
             }
             if (false)
             {
@@ -376,6 +422,10 @@ namespace NJBC.DataLayer.Repository
             {
                 return false;
             }
+        }
+        public async Task<long> GetLastCommentID()
+        {
+            return dBContext.Comments.Max(x => x.CommentId);
         }
         #endregion
 

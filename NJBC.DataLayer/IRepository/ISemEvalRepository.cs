@@ -37,6 +37,9 @@ namespace NJBC.DataLayer.IRepository
         List<Comment> SearchCommentAsync(string name, string text);
         Task<bool> SetLabelComment(SetLabelCommentParam param);
         Task<bool> EditComment(long commentId, string cBodyClean);
+        Task<Dictionary<string, long>> GetUsersAsync();
+        Task<long> GetLastQuestionID();
+        Task<long> GetLastCommentID();
         #endregion
 
         #region SemEval 2016
