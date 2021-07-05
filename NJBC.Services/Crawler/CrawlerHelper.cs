@@ -22,28 +22,17 @@ namespace NJBC.Services.Crawler
         public void StartCrawling()
         {
             List<TopicLink> links = new List<TopicLink>();
-            links = GetTopics(new List<int> { 118 }); // گرفتن لیست تاپیک ها
+            links = GetTopics(new List<int> { 21 }); // گرفتن لیست تاپیک ها
 
             Console.WriteLine("Topic Number: " + links.Count);
-            int[] question33 = { 1030022, 1266735, 1344382, 1409534, 1422688, 1985551, 2239641, 236761, 2452313, 2631369, 2868253, 2906821, 3163191, 335680, 3592256, 367005, 4621442, 4854228, 5484817, 5487432, 5510626, 5522259, 5523051, 5526057, 5527513, 5527836, 5528772, 5532172, 5532372, 5532710, 5535178, 5535346, 5536147 };
-            Console.WriteLine("Count Int Array: " + question33.Length);
-            var _links = links.Where(x => question33.Contains(x.TopicId));
-            Console.WriteLine("Count Int Array: " + _links.Count());
-            foreach (var _link in question33)
+            foreach (var link in links)
             {
                 try
                 {
-                    //string path = @"C:\Nini\Forum\" + link.ForumId + "\\"+ link.TopicId + ".json";
-                    string path = @"C:\Nini\Forum\" + 118 + "\\" + _link + ".json";
-                    if (File.Exists(path))
-                    {
-                        Console.Write($"Conut: E   \t");
-                        continue;
-                    }
-                    Console.Write($"| {_link} | ");
+                    Console.Write($"| {link.TopicId} | ");
                     Topic topic = new Topic();
                     List<Message> msgs = new List<Message>();
-                    var url = $"https://www.ninisite.com/discussion/topic/{_link}";
+                    var url = $"https://www.ninisite.com/discussion/topic/{link.TopicId}";
                     string description = "";
 
                     var web = new HtmlWeb(); // گرفتن اطلاعات از صفحه وب
@@ -162,7 +151,7 @@ namespace NJBC.Services.Crawler
                     {
                         // اگر خالی باشد، یعنی تاپیک یک صفحه بیشتر ندارد
                         // و ما با شناسه تاپیک عدد یک را ارسال میکنیم برای کرال کردن پاسخ ها
-                        msgs.AddRange(getAnswersFromTopicId(_link, 1));
+                        msgs.AddRange(getAnswersFromTopicId(link.TopicId, 1));
                     }
                     else
                     {
@@ -184,7 +173,7 @@ namespace NJBC.Services.Crawler
                         {
                             try
                             {
-                                var _msgs = getAnswersFromTopicId(_link, i);
+                                var _msgs = getAnswersFromTopicId(link.TopicId, i);
                                 if (_msgs.Count() > 0)
                                 {
                                     msgs.AddRange(_msgs);
@@ -196,14 +185,14 @@ namespace NJBC.Services.Crawler
                         }
                     }
 
-                    topic.TopicId = _link;
+                    topic.TopicId = link.TopicId;
                     topic.Messages = msgs;
                     topic.Question = question;
                     topic.Description = description;
 
 
                     var jsonFile = JsonConvert.SerializeObject(topic);
-                    MakeJson(jsonFile, _link, topic.TopicId);
+                    MakeJson(jsonFile, link.ForumId, topic.TopicId);
                     // به دلیل وجود مقادیر تمیز نشده در برخی از فیلدها، امکان دخیره سازی با فرمت فوق ناممکن است
 
                     //string csv = "";
@@ -215,8 +204,7 @@ namespace NJBC.Services.Crawler
                 }
                 catch (Exception ex)
                 {
-                    //Console.WriteLine($"*******\nError -> ForumId: {link.ForumId}   Topicid: {link.TopicId}\n{ex.Message}\n");
-                    Console.WriteLine($"*******\nError -> ForumId: 118   Topicid: {_link}\n{ex.Message}\n");
+                    Console.WriteLine($"*******\nError -> ForumId: {link.ForumId}   Topicid: {link.TopicId}\n{ex.Message}\n");
                 }
             }
         }
