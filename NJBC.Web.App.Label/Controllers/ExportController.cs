@@ -13,6 +13,8 @@ using NJBC.Common;
 using NJBC.DataLayer.IRepository;
 using NJBC.DataLayer.Models.Semeval2015;
 using NJBC.Models.Crawler;
+using NJBC.Models.DTO.Question;
+using NJBC.Models.DTO.Comment;
 
 namespace NJBC.Web.App.Label.Controllers
 {
@@ -24,6 +26,9 @@ namespace NJBC.Web.App.Label.Controllers
             this.SemEvalRepository = SemEvalRepository;
         }
 
+        //XML
+        // Test - Train
+        // 70% - 30%
         public IActionResult Index1()
         {
             List<string> answertrain = new List<string>();
@@ -146,6 +151,9 @@ namespace NJBC.Web.App.Label.Controllers
             return Ok();
         }
 
+        //CSV
+        // test - train
+        // 75% - 25
         public IActionResult Index2()
         {
             List<string> answertrain = new List<string>();
@@ -209,7 +217,10 @@ namespace NJBC.Web.App.Label.Controllers
             return Ok();
         }
 
-
+        //CSV
+        //JSON
+        //Shuffle
+        //All-Data
         public IActionResult Index21()
         {
             List<question> questions = new List<question>();
@@ -282,6 +293,12 @@ namespace NJBC.Web.App.Label.Controllers
             return Ok();
         }
 
+        //CSV
+        //JSON
+        //Test Train Dev
+        // 70% 20% 10%
+        // qid,question,answer,label
+        // Details , Lenghts
         public IActionResult Data702010()
         {
             List<question> questions = new List<question>();
@@ -491,6 +508,7 @@ namespace NJBC.Web.App.Label.Controllers
             return Ok();
         }
 
+        //Test
         public IActionResult DataLenghts()
         {
             List<Question> data = SemEvalRepository.GetLabeledQuestions().Result;
@@ -566,6 +584,10 @@ namespace NJBC.Web.App.Label.Controllers
             return Ok();
         }
 
+        //JSON
+        //Train - Test
+        // 75% - 25%
+        // unknow
         public IActionResult Index3()
         {
             List<string> answertrain = new List<string>();
@@ -633,7 +655,7 @@ namespace NJBC.Web.App.Label.Controllers
                     {
                         System.IO.File.WriteAllText($@"c:\sem\Train-{j}.json", JsonConvert.SerializeObject(questions.Select(x => new { answer = x.answers.Select(y => y.id).ToArray(), question = x.text })));
                         List<string> _answer2 = new List<string>();
-                        var _answers1 = questions.Select(x => x.answers.Select(y => y.comment)).ToList().Select(x => x).ToList().Select(x => x).ToList();
+                        List<IEnumerable<string>> _answers1 = questions.Select(x => x.answers.Select(y => y.comment)).ToList().Select(x => x).ToList().Select(x => x).ToList();
                         foreach (var item in _answers1)
                         {
                             _answer2.AddRange(item);
@@ -645,7 +667,8 @@ namespace NJBC.Web.App.Label.Controllers
             return Ok();
         }
 
-
+        //XML
+        //All_Data
         public IActionResult Index4()
         {
             List<Question> data = SemEvalRepository.GetLabeledQuestions().Result;
@@ -682,29 +705,120 @@ namespace NJBC.Web.App.Label.Controllers
             return Ok();
         }
 
+        //CSV
+        // qid,question,answer,label
+        // QID,QUsername,QDATE,QSubject,QBody,CID,CUSERID,CUsername,CBodyClean,CGOLD
+        //Shuffle
+        //All Data
+        //Export 1400-04-14 - Send
         public IActionResult Index5()
         {
             List<Question> data = SemEvalRepository.GetLabeledQuestions().Result;
-
-            string xmlHeader = System.IO.File.ReadAllText(@"c:\sem\SemEval2016.xml");
 
             StringBuilder sb = new StringBuilder();
             IEnumerable<Question> _data = new List<Question>();
             _data = data.Randomize();
 
-            sb.AppendLine("qid,question,answer,label");
+            sb.AppendLine("QID,QUsername,QDATE,QSubject,QBody,CID,CUSERID,CUsername,CBodyClean,CGOLD");
             foreach (var q in _data)
             {
                 for (int i = 0; i < q.Comments.Count; i++)
                 {
                     var c = q.Comments.ToList();
-                    sb.AppendLine($"{q.QID},{q.QBody},{c[i].CBodyClean},{c[i].CGOLD}");
+                    sb.AppendLine($"{q.QID},{q.QUsername},{q.QDATE.ToString("yyyy/MM/dd HH:mm")},{q.QSubject},{q.QBody},{c[i].CID},{c[i].CUSERID},{c[i].CUsername},{c[i].CBodyClean},{c[i].CGOLD}");
                 }
             }
             System.IO.File.WriteAllText($@"c:\sem\Data_CSV_Random.csv", sb.ToString(), Encoding.UTF8);
 
             return Ok();
         }
+
+        // Json
+        //Shuffle
+        //All Data
+        //Export 1400-04-15 - Run
+        public IActionResult Index6()
+        {
+            List<Question> data = SemEvalRepository.GetLabeledQuestions().Result;
+
+            StringBuilder sb = new StringBuilder();
+            List<Question> _data = new List<Question>();
+            _data = data.Where(x => x.Comments != null && x.Comments.Count > 0).Randomize().ToList();
+
+            List<QuestionDTO> questions = new List<QuestionDTO>();
+            List<CommentDTO> comments = new List<CommentDTO>();
+
+
+            questions = ConvertQuestionToDTO(_data);
+
+
+            string _jsonString = JsonConvert.SerializeObject(questions, Formatting.Indented);
+            System.IO.File.WriteAllText($@"c:\sem\Data_Json_Random.json", _jsonString, Encoding.UTF8);
+
+            return Ok();
+        }
+
+        private QuestionDTO ConvertQuestionToDTO(Question q)
+        {
+            QuestionDTO dto = new QuestionDTO();
+            dto.QBody = q.QBody;
+            dto.QCATEGORY = dto.QCATEGORY;
+            dto.QDATE = q.QDATE;
+            if (!string.IsNullOrEmpty(q.QGOLD_YN))
+            {
+                dto.QGOLD_YN = q.QGOLD_YN;
+            }
+            else
+            {
+                dto.QGOLD_YN = "";
+            }
+            dto.QID = q.QID;
+            dto.QSubject = q.QSubject;
+            dto.QTYPE = q.QTYPE;
+            dto.QUSERID = q.QUSERID;
+            dto.QUsername = q.QUsername;
+            dto.Comments = ConvertCommentToDTO(q.Comments.ToList());
+
+            return dto;
+        }
+        private List<QuestionDTO> ConvertQuestionToDTO(List<Question> q)
+        {
+            List<QuestionDTO> dto = new List<QuestionDTO>();
+            for (int i = 0; i < q.Count; i++)
+            {
+                dto.Add(ConvertQuestionToDTO(q[i]));
+            }
+            return dto;
+        }
+
+        private CommentDTO ConvertCommentToDTO(Comment c)
+        {
+            CommentDTO dto = new CommentDTO();
+            dto.CBody = c.CBody;
+            dto.CBodyClean = c.CBodyClean;
+            dto.CDate = c.CDate;
+            dto.CGOLD = c.CGOLD;
+            dto.CGOLD_YN = c.CGOLD_YN;
+            dto.CID = c.CID;
+            dto.CSubject = c.CSubject;
+            dto.CUSERID = c.CUSERID;
+            dto.CUsername = c.CUsername;
+            dto.LabelDate = c.LabelDate;
+            if (c.ReplayCommentId.HasValue)
+                dto.ReplayCommentId = c.ReplayCommentId;
+
+            return dto;
+        }
+        private List<CommentDTO> ConvertCommentToDTO(List<Comment> c)
+        {
+            List<CommentDTO> dto = new List<CommentDTO>();
+            for (int i = 0; i < c.Count; i++)
+            {
+                dto.Add(ConvertCommentToDTO(c[i]));
+            }
+            return dto;
+        }
+
 
 
         private int Median(List<int> numbers)
